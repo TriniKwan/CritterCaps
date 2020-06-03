@@ -8,13 +8,13 @@ using CritterCaps.Models;
 using Microsoft.Extensions.Configuration;
 
 
-namespace CritterCaps.DataAccess
+namespace CritterCaps.Repositories
 {
-    public class CritterCapsRepository
+    public class ProductTypesRepository
     {
         string ConnectionString;
 
-        public CritterCapsRepository(IConfiguration config)
+        public ProductTypesRepository(IConfiguration config)
         {
             ConnectionString = config.GetConnectionString("CritterCaps");
         }

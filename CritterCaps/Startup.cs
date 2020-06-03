@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CritterCaps.DataAccess;
+using CritterCaps.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +27,8 @@ namespace CritterCaps
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<CritterCapsRepository>();
+            services.AddTransient<ProductTypesRepository>();
+            services.AddTransient<ProductRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
 
