@@ -8,7 +8,7 @@ using CritterCaps.DataAccess;
 
 namespace CritterCaps.Controllers
 {
-    [Route("api/critterCaps")]
+    [Route("api/crittercaps")]
     [ApiController]
     public class CritterCapsController : ControllerBase
     {
