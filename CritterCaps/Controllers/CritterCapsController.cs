@@ -38,5 +38,18 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
+        [HttpGet("animals")]
+        public IActionResult GetAllAnimals()
+        {
+            var repo = new AnimalRepository();
+            var result = repo.GetAllAnimals();
+            if (!result.Any())
+            {
+                return NotFound("We don't like those animals");
+            }
+
+            return Ok(result);
+        }
+
     }
 }
