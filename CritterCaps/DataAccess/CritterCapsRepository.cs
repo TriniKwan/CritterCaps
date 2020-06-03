@@ -18,6 +18,10 @@ namespace CritterCaps.DataAccess
                         from ProductType";
 
             using (var db = new SqlConnection(ConnectionString))
+            {
+                var productTypes = db.Query<ProductType>(sql).ToList();
+                return productTypes;
+            }
         }
     }
 }
