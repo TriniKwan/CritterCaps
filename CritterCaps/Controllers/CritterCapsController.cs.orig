@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CritterCaps.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CritterCaps.DataAccess;
 
 namespace CritterCaps.Controllers
 {
@@ -12,36 +13,37 @@ namespace CritterCaps.Controllers
     [ApiController]
     public class CritterCapsController : ControllerBase
     {
-        ProductTypesRepository _productTypesRepository;
-        ProductRepository _productRepository;
+<<<<<<< HEAD
+        CritterCapsRepository _repository;
 
-        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository)
+        public CritterCapsController(CritterCapsRepository repository)
         {
-            _productTypesRepository = productTypesRepository;
-            _productRepository = productRepository;
+            _repository = repository;
         }
 
         [HttpGet("productTypes")]
         public IActionResult GetAllProductTypes()
         {
-            var result = _productTypesRepository.GetAllProductTypes();
+            var result = _repository.GetAllProductTypes();
             return Ok(result);
         }
 
         [HttpGet("productType/{productType}")]
         public IActionResult GetSingleProductType(string productType)
         {
-            var result = _productTypesRepository.GetSingleProductType(productType);
+            var result = _repository.GetSingleProductType(productType);
             if (result == null)
             {
                 return NotFound("Oops! We haven't had time to craft that type of hat.");
             }
             return Ok(result);
         }
+=======
         [HttpGet("products")]
         public IActionResult GetAllProducts()
         {
-            var result = _productRepository.GetAllProducts();
+            var repo = new ProductRepository();
+            var result = repo.GetAllProducts();
             if(!result.Any())
             {
                 return NotFound("No products available");
@@ -53,7 +55,8 @@ namespace CritterCaps.Controllers
         [HttpGet("product/{productId}")]
         public IActionResult GetSingleProduct(int productId)
         {
-            var result = _productRepository.GetSingleProduct(productId);
+            var repo = new ProductRepository();
+            var result = repo.GetSingleProduct(productId);
             if (result == null)
             {
                 return NotFound("No products available");
@@ -62,19 +65,6 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
-// GET ALL USERS ////
-        [HttpGet("user/{Id}")]
-        public IActionResult GetAllUsers(int Id)
-        {
-            var repo = new UserRepository();
-            var result = repo.GetAllUsers(Id);
-            if (result == null)
-            {
-                return NotFound("No users available");
-            }
-
-            return Ok(result);
-        }
-
+>>>>>>> master
     }
 }

@@ -13,3 +13,6 @@ Administrator bit not null
 
 insert into [User] (FirstName,LastName,AccountDate,Administrator)
 values('Emilee','Mitchell', '1984-09-27',1),('Laura','Collins', '1984-07-20',0),('Randy','Tate', '1986-01-28',0),('Monica','Djunaidi', '1990-06-15',0)
+
+select *
+from [User]
