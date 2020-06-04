@@ -38,5 +38,19 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
+// GET ALL USERS ////
+        [HttpGet("user/{Id}")]
+        public IActionResult GetAllUsers(int Id)
+        {
+            var repo = new UserRepository();
+            var result = repo.GetAllUsers(Id);
+            if (result == null)
+            {
+                return NotFound("No users available");
+            }
+
+            return Ok(result);
+        }
+
     }
 }
