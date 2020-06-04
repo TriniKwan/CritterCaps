@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CritterCaps.Repositories;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using CritterCaps.DataAccess;
+
+namespace CritterCaps.Controllers
+{
+    [Route("api/crittercaps")]
+    [ApiController]
+    public class CritterCapsController : ControllerBase
+    {
+<<<<<<< HEAD
+        CritterCapsRepository _repository;
+
+        public CritterCapsController(CritterCapsRepository repository)
+        {
+            _repository = repository;
+        }
+
+        [HttpGet("productTypes")]
+        public IActionResult GetAllProductTypes()
+        {
+            var result = _repository.GetAllProductTypes();
+            return Ok(result);
+        }
+
+        [HttpGet("productType/{productType}")]
+        public IActionResult GetSingleProductType(string productType)
+        {
+            var result = _repository.GetSingleProductType(productType);
+            if (result == null)
+            {
+                return NotFound("Oops! We haven't had time to craft that type of hat.");
+            }
+            return Ok(result);
+        }
+=======
+        [HttpGet("products")]
+        public IActionResult GetAllProducts()
+        {
+            var repo = new ProductRepository();
+            var result = repo.GetAllProducts();
+            if(!result.Any())
+            {
+                return NotFound("No products available");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("product/{productId}")]
+        public IActionResult GetSingleProduct(int productId)
+        {
+            var repo = new ProductRepository();
+            var result = repo.GetSingleProduct(productId);
+            if (result == null)
+            {
+                return NotFound("No products available");
+            }
+
+            return Ok(result);
+        }
+
+>>>>>>> master
+    }
+}

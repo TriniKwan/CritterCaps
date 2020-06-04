@@ -12,11 +12,36 @@ namespace CritterCaps.Controllers
     [ApiController]
     public class CritterCapsController : ControllerBase
     {
+        ProductTypesRepository _productTypesRepository;
+        ProductRepository _productRepository;
+
+        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository)
+        {
+            _productTypesRepository = productTypesRepository;
+            _productRepository = productRepository;
+        }
+
+        [HttpGet("productTypes")]
+        public IActionResult GetAllProductTypes()
+        {
+            var result = _productTypesRepository.GetAllProductTypes();
+            return Ok(result);
+        }
+
+        [HttpGet("productType/{productType}")]
+        public IActionResult GetSingleProductType(string productType)
+        {
+            var result = _productTypesRepository.GetSingleProductType(productType);
+            if (result == null)
+            {
+                return NotFound("Oops! We haven't had time to craft that type of hat.");
+            }
+            return Ok(result);
+        }
         [HttpGet("products")]
         public IActionResult GetAllProducts()
         {
-            var repo = new ProductRepository();
-            var result = repo.GetAllProducts();
+            var result = _productRepository.GetAllProducts();
             if(!result.Any())
             {
                 return NotFound("No products available");
@@ -28,8 +53,7 @@ namespace CritterCaps.Controllers
         [HttpGet("product/{productId}")]
         public IActionResult GetSingleProduct(int productId)
         {
-            var repo = new ProductRepository();
-            var result = repo.GetSingleProduct(productId);
+            var result = _productRepository.GetSingleProduct(productId);
             if (result == null)
             {
                 return NotFound("No products available");
