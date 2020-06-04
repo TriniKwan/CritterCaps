@@ -29,6 +29,7 @@ namespace CritterCaps
             services.AddControllers();
             services.AddTransient<ProductTypesRepository>();
             services.AddTransient<ProductRepository>();
+            services.AddTransient<UserRepository>();
             services.AddSingleton<IConfiguration>(Configuration);
         }
 

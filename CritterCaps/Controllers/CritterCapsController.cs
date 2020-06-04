@@ -13,12 +13,14 @@ namespace CritterCaps.Controllers
     public class CritterCapsController : ControllerBase
     {
         ProductTypesRepository _productTypesRepository;
-        ProductRepository _productRepository;
+        ProductRepository _productRepository; 
+        UserRepository _UserRepository;
 
-        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository)
+        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository, UserRepository userRepository)
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
+            _UserRepository = userRepository;
         }
 
         [HttpGet("productTypes")]
@@ -63,12 +65,11 @@ namespace CritterCaps.Controllers
         }
 
 // GET ALL USERS ////
-        [HttpGet("user/{Id}")]
-        public IActionResult GetAllUsers(int Id)
+        [HttpGet("user")]
+        public IActionResult GetAllUsers()
         {
-            var repo = new UserRepository();
-            var result = repo.GetAllUsers(Id);
-            if (result == null)
+            var result = _UserRepository.GetAllUsers();
+            if (!result.Any())
             {
                 return NotFound("No users available");
             }
