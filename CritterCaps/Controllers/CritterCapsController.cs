@@ -99,5 +99,18 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
+        //Get Single Order
+        [HttpGet("order/{orderId}")]
+        public IActionResult GetSingleOrder(int orderId)
+        {
+            var result = _ordersRepository.GetSingleOrder(orderId);
+            if(result == null)
+            {
+                return NotFound("No order found");
+            }
+
+            return Ok(result);
+        }
+
     }
 }

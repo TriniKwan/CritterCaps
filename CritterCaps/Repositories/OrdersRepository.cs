@@ -35,5 +35,36 @@ namespace CritterCaps.Repositories
             }
         }
 
+        public OrderWithLineItems GetSingleOrder(int orderId)
+        {
+            var orderSql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total, PaymentType.[Type] AS PaymentType
+                         FROM[Order]
+                            JOIN[User]
+                            ON[Order].UserId = [User].ID
+                            JOIN PaymentType
+                            ON PaymentType.PaymentID = [Order].PaymentType
+                        WHERE [Order].OrderId = @orderId";
+
+            var lineItem = $@"SELECT [Order].OrderId, Products.Title, LineItem.UnitPrice, LineItem.Quantity
+                            FROM [Order]
+	                            JOIN LineItem
+	                            ON [Order].OrderId = LineItem.OrderId
+	                            JOIN Products
+	                            ON LineItem.ProductId = Products.ProductId
+                            WHERE [Order].OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var order = db.QueryFirstOrDefault<OrderWithLineItems>(orderSql, new { OrderId = orderId });
+                var lineItems = db.Query<LineItem>(lineItem, new { OrderId = orderId });
+
+                order.LineItem = lineItems;
+
+                return order;
+            }
+        }
+
+        
+
     }
 }
