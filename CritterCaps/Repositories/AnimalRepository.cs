@@ -34,11 +34,11 @@ namespace CritterCaps.Repositories
         {
             var sql = @"select AnimalType
                         from AnimalType
-                        where AnimalType = @animalType;";
+                        where AnimalType like @animalType";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var animal = db.QueryFirstOrDefault<Animal>(sql, new { AnimalType = animalType });
+                var animal = db.QueryFirstOrDefault<Animal>(sql, new { AnimalType = "%"+animalType+"%" });
 
                 return animal;
             }
