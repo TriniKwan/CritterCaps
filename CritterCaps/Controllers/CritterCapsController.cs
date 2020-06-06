@@ -16,13 +16,6 @@ namespace CritterCaps.Controllers
         ProductTypesRepository _productTypesRepository;
         ProductRepository _productRepository; 
         UserRepository _UserRepository;
-<<<<<<< HEAD
-
-        public CritterCapsController(ProductTypesRepository productTypesRepository, 
-                                     ProductRepository productRepository,
-                                     UserRepository userRepository)
-=======
-        OrdersRepository _ordersRepository;
         AnimalRepository _animalRepository;
 
         public CritterCapsController(ProductTypesRepository productTypesRepository, 
@@ -30,7 +23,6 @@ namespace CritterCaps.Controllers
                                      UserRepository userRepository,
                                      OrdersRepository ordersRepository,
                                      AnimalRepository animalRepository)
->>>>>>> master
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
@@ -94,34 +86,6 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
-<<<<<<< HEAD
-=======
-
-        //Get All Orders
-        [HttpGet("orders")]
-        public IActionResult GetAllOrders()
-        {
-            var result = _ordersRepository.GetAllOrders();
-            if (!result.Any())
-            {
-                return NotFound("No orders available");
-            }
-
-            return Ok(result);
-        }
-
-        //Get Single Order
-        [HttpGet("order/{orderId}")]
-        public IActionResult GetSingleOrder(int orderId)
-        {
-            var result = _ordersRepository.GetSingleOrder(orderId);
-            if(result == null)
-            {
-                return NotFound("No order found");
-            }
-
-            return Ok(result);
-        }
 
         [HttpGet("animals")]
         public IActionResult GetAllAnimals()
@@ -158,6 +122,5 @@ namespace CritterCaps.Controllers
             }
             return Ok(result);
         }
->>>>>>> master
     }
 }
