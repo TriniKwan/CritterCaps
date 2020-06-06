@@ -7,7 +7,7 @@ namespace CritterCaps.Models
 {
     public class Animal
     {
-        public int ID { get; set; }
+        public int AnimalId { get; set; }
         public string AnimalType { get; set; }
     }
 }
