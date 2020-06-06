@@ -14,11 +14,13 @@ namespace CritterCaps.Controllers
     {
         ProductTypesRepository _productTypesRepository;
         ProductRepository _productRepository;
+        AnimalRepository _animalRepository;
 
-        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository)
+        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository, AnimalRepository animalRepository)
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
+            _animalRepository = animalRepository;
         }
 
         [HttpGet("productTypes")]
@@ -65,8 +67,7 @@ namespace CritterCaps.Controllers
         [HttpGet("animals")]
         public IActionResult GetAllAnimals()
         {
-            var repo = new AnimalRepository();
-            var result = repo.GetAllAnimals();
+            var result = _animalRepository.GetAllAnimals();
             if (!result.Any())
             {
                 return NotFound("We don't like those animals");
@@ -75,11 +76,10 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
-        [HttpGet("animal/{animalType}")]
+        [HttpGet("animals/{animalType}")]
         public IActionResult GetSingleAnimal(string animalType)
         {
-            var repo = new AnimalRepository();
-            var result = repo.GetSingleAnimal(animalType);
+            var result = _animalRepository.GetSingleAnimal(animalType);
             if (result == null)
             {
                 return NotFound("Your animal doesn't exist here");
@@ -87,18 +87,5 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
-        [HttpGet("animals")]
-        public IActionResult GetAllAnimals()
-        {
-            var repo = new AnimalRepository();
-            var result = repo.GetAllAnimals();
-            if (!result.Any())
-            {
-                return NotFound("We don't like those animals");
-            }
-
-            return Ok(result);
-        }
-
     }
 }
