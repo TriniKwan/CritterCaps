@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CritterCaps.Models;
 using CritterCaps.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,17 @@ namespace CritterCaps.Controllers
         ProductTypesRepository _productTypesRepository;
         ProductRepository _productRepository; 
         UserRepository _UserRepository;
+        OrdersRepository _ordersRepository;
 
-        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository, UserRepository userRepository)
+        public CritterCapsController(ProductTypesRepository productTypesRepository, 
+                                     ProductRepository productRepository,
+                                     UserRepository userRepository,
+                                     OrdersRepository ordersRepository)
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
             _UserRepository = userRepository;
+            _ordersRepository = ordersRepository;
         }
 
         [HttpGet("productTypes")]
@@ -40,6 +46,8 @@ namespace CritterCaps.Controllers
             }
             return Ok(result);
         }
+
+        //Get All Products
         [HttpGet("products")]
         public IActionResult GetAllProducts()
         {
@@ -52,6 +60,7 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
+        //Get a single product
         [HttpGet("product/{productId}")]
         public IActionResult GetSingleProduct(int productId)
         {
@@ -72,6 +81,32 @@ namespace CritterCaps.Controllers
             if (!result.Any())
             {
                 return NotFound("No users available");
+            }
+
+            return Ok(result);
+        }
+
+        //Get All Orders
+        [HttpGet("orders")]
+        public IActionResult GetAllOrders()
+        {
+            var result = _ordersRepository.GetAllOrders();
+            if (!result.Any())
+            {
+                return NotFound("No orders available");
+            }
+
+            return Ok(result);
+        }
+
+        //Get Single Order
+        [HttpGet("order/{orderId}")]
+        public IActionResult GetSingleOrder(int orderId)
+        {
+            var result = _ordersRepository.GetSingleOrder(orderId);
+            if(result == null)
+            {
+                return NotFound("No order found");
             }
 
             return Ok(result);

@@ -5,7 +5,7 @@ create table Products (
 	Title varchar(250) not null,
 	[Description] varchar(250) not null,
 	Quantity int not null,
-	Price decimal not null,
+	Price decimal(18,2) not null,
 	imageUrl varchar(250),
 	inStock BIT not null
 )
