@@ -12,3 +12,8 @@ values ('Reptiles'),
 
 select *
 from AnimalType
+
+select AnimalType as "Animal Type"
+from AnimalType
+where AnimalType = 'Reptiles';
+
