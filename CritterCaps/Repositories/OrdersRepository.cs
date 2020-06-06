@@ -58,9 +58,49 @@ namespace CritterCaps.Repositories
                 var order = db.QueryFirstOrDefault<OrderWithLineItems>(orderSql, new { OrderId = orderId });
                 var lineItems = db.Query<LineItem>(lineItem, new { OrderId = orderId });
 
-                order.LineItem = lineItems;
+                if (lineItems.Any())
+                {
+                    order.LineItem = lineItems;
+                }
 
                 return order;
+            }
+        }
+
+        public IEnumerable<OrderCheck> CheckExistingOrder(int userId)
+        {
+            var sql = @"SELECT *
+                        FROM [Order]
+                        WHERE Total IS NULL AND UserId = @userId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var checkForOpenOrder = db.Query<OrderCheck>(sql, new { UserId = userId });
+
+                return checkForOpenOrder;
+            }
+        }
+
+        public NewOrder CreateNewOrder(int userId)
+        {
+            var sql = $@"INSERT INTO [Order] (UserId, InvoiceDate)
+                        OUTPUT INSERTED.OrderId
+                        values (@userId, '{DateTime.Now}')";
+
+            var newOrderSql = @"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate
+                                 FROM[Order]
+                                    JOIN[User]
+                                    ON[Order].UserId = [User].ID
+                                WHERE [Order].OrderId = @orderId";
+
+
+            using (var db = new SqlConnection(ConnectionString))
+            { 
+                var orderId = db.QuerySingle<int>(sql, new { UserId = userId });
+
+                var newOrder = db.QueryFirstOrDefault<NewOrder>(newOrderSql, new { OrderId = orderId });
+
+                return newOrder;
             }
         }
 
