@@ -30,8 +30,22 @@ namespace CritterCaps.Repositories
 
                 return users;
             }
-        }
+        } 
+        public User GetSingleUser(int Id)
+        {
+            var sql = @"SELECT *
+                        FROM [User]
+                        Where Id = @Id;
+	                     ";
 
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { Id = Id };
+                var user = db.QueryFirstOrDefault<User>(sql, parameters);
+
+                return user;
+            }
+        }
     }
 }
     

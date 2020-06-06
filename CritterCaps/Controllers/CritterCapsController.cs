@@ -16,13 +16,25 @@ namespace CritterCaps.Controllers
         ProductTypesRepository _productTypesRepository;
         ProductRepository _productRepository; 
         UserRepository _UserRepository;
+<<<<<<< HEAD
 
         public CritterCapsController(ProductTypesRepository productTypesRepository, 
                                      ProductRepository productRepository,
                                      UserRepository userRepository)
+=======
+        OrdersRepository _ordersRepository;
+        AnimalRepository _animalRepository;
+
+        public CritterCapsController(ProductTypesRepository productTypesRepository, 
+                                     ProductRepository productRepository,
+                                     UserRepository userRepository,
+                                     OrdersRepository ordersRepository,
+                                     AnimalRepository animalRepository)
+>>>>>>> master
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
+            _animalRepository = animalRepository;
             _UserRepository = userRepository;
         }
 
@@ -70,7 +82,7 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
-// GET ALL USERS ////
+    // GET ALL USERS ////
         [HttpGet("user")]
         public IActionResult GetAllUsers()
         {
@@ -82,5 +94,70 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
+<<<<<<< HEAD
+=======
+
+        //Get All Orders
+        [HttpGet("orders")]
+        public IActionResult GetAllOrders()
+        {
+            var result = _ordersRepository.GetAllOrders();
+            if (!result.Any())
+            {
+                return NotFound("No orders available");
+            }
+
+            return Ok(result);
+        }
+
+        //Get Single Order
+        [HttpGet("order/{orderId}")]
+        public IActionResult GetSingleOrder(int orderId)
+        {
+            var result = _ordersRepository.GetSingleOrder(orderId);
+            if(result == null)
+            {
+                return NotFound("No order found");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("animals")]
+        public IActionResult GetAllAnimals()
+        {
+            var result = _animalRepository.GetAllAnimals();
+            if (!result.Any())
+            {
+                return NotFound("We don't like those animals");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("animals/{animalType}")]
+        public IActionResult GetSingleAnimal(string animalType)
+        {
+            var result = _animalRepository.GetSingleAnimal(animalType);
+            if (result == null)
+            {
+                return NotFound("Your animal doesn't exist here");
+            }
+
+            return Ok(result);
+        }
+
+        // GET ONE USER ////
+        [HttpGet("userId/{userId}")]
+        public IActionResult GetSingleUser(int userId)
+        {
+            var result = _UserRepository.GetSingleUser(userId); ;
+            if (result == null)
+            {
+                return NotFound("This is not the user you are looking for.");
+            }
+            return Ok(result);
+        }
+>>>>>>> master
     }
 }
