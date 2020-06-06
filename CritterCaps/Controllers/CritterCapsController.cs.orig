@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CritterCaps.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CritterCaps.DataAccess;
 
 namespace CritterCaps.Controllers
 {
@@ -13,37 +12,38 @@ namespace CritterCaps.Controllers
     [ApiController]
     public class CritterCapsController : ControllerBase
     {
-<<<<<<< HEAD
-        CritterCapsRepository _repository;
+        ProductTypesRepository _productTypesRepository;
+        ProductRepository _productRepository; 
+        UserRepository _UserRepository;
 
-        public CritterCapsController(CritterCapsRepository repository)
+        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository, UserRepository userRepository)
         {
-            _repository = repository;
+            _productTypesRepository = productTypesRepository;
+            _productRepository = productRepository;
+            _UserRepository = userRepository;
         }
 
         [HttpGet("productTypes")]
         public IActionResult GetAllProductTypes()
         {
-            var result = _repository.GetAllProductTypes();
+            var result = _productTypesRepository.GetAllProductTypes();
             return Ok(result);
         }
 
         [HttpGet("productType/{productType}")]
         public IActionResult GetSingleProductType(string productType)
         {
-            var result = _repository.GetSingleProductType(productType);
+            var result = _productTypesRepository.GetSingleProductType(productType);
             if (result == null)
             {
                 return NotFound("Oops! We haven't had time to craft that type of hat.");
             }
             return Ok(result);
         }
-=======
         [HttpGet("products")]
         public IActionResult GetAllProducts()
         {
-            var repo = new ProductRepository();
-            var result = repo.GetAllProducts();
+            var result = _productRepository.GetAllProducts();
             if(!result.Any())
             {
                 return NotFound("No products available");
@@ -55,8 +55,7 @@ namespace CritterCaps.Controllers
         [HttpGet("product/{productId}")]
         public IActionResult GetSingleProduct(int productId)
         {
-            var repo = new ProductRepository();
-            var result = repo.GetSingleProduct(productId);
+            var result = _productRepository.GetSingleProduct(productId);
             if (result == null)
             {
                 return NotFound("No products available");
@@ -65,6 +64,44 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
->>>>>>> master
+<<<<<<< HEAD
+        [HttpGet("animals")]
+        public IActionResult GetAllAnimals()
+        {
+            var repo = new AnimalRepository();
+            var result = repo.GetAllAnimals();
+            if (!result.Any())
+            {
+                return NotFound("We don't like those animals");
+=======
+// GET ALL USERS ////
+        [HttpGet("user")]
+        public IActionResult GetAllUsers()
+        {
+            var result = _UserRepository.GetAllUsers();
+            if (!result.Any())
+            {
+                return NotFound("No users available");
+>>>>>>> 403d4d97fd290f9fd2a11ca3d5d08279034e01d8
+            }
+
+            return Ok(result);
+        }
+
+<<<<<<< HEAD
+        [HttpGet("animal/{animalType}")]
+        public IActionResult GetSingleAnimal(string animalType)
+        {
+            var repo = new AnimalRepository();
+            var result = repo.GetSingleAnimal(animalType);
+            if (result == null)
+            {
+                return NotFound("Your animal doesn't exist here");
+            }
+
+            return Ok(result);
+        }
+=======
+>>>>>>> 403d4d97fd290f9fd2a11ca3d5d08279034e01d8
     }
 }
