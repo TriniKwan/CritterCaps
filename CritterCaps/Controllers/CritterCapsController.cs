@@ -17,14 +17,17 @@ namespace CritterCaps.Controllers
         ProductRepository _productRepository; 
         UserRepository _UserRepository;
         OrdersRepository _ordersRepository;
+        AnimalRepository _animalRepository;
 
         public CritterCapsController(ProductTypesRepository productTypesRepository, 
                                      ProductRepository productRepository,
                                      UserRepository userRepository,
-                                     OrdersRepository ordersRepository)
+                                     OrdersRepository ordersRepository,
+                                     AnimalRepository animalRepository)
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
+            _animalRepository = animalRepository;
             _UserRepository = userRepository;
             _ordersRepository = ordersRepository;
         }
@@ -107,6 +110,30 @@ namespace CritterCaps.Controllers
             if(result == null)
             {
                 return NotFound("No order found");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("animals")]
+        public IActionResult GetAllAnimals()
+        {
+            var result = _animalRepository.GetAllAnimals();
+            if (!result.Any())
+            {
+                return NotFound("We don't like those animals");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("animals/{animalType}")]
+        public IActionResult GetSingleAnimal(string animalType)
+        {
+            var result = _animalRepository.GetSingleAnimal(animalType);
+            if (result == null)
+            {
+                return NotFound("Your animal doesn't exist here");
             }
 
             return Ok(result);

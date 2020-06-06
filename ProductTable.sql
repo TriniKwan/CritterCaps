@@ -20,3 +20,5 @@ values('1','3', 'Kittys Graduation', 'Celebrate graduation day with this fancy g
 
 select *
 from Products
+
+drop table Products
