@@ -64,7 +64,7 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
-// GET ALL USERS ////
+    // GET ALL USERS ////
         [HttpGet("user")]
         public IActionResult GetAllUsers()
         {
@@ -76,6 +76,16 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
-
+        // GET ONE USER ////
+        [HttpGet("userId/{userId}")]
+        public IActionResult GetSingleUser(int userId)
+        {
+            var result = _UserRepository.GetSingleUser(userId); ;
+            if (result == null)
+            {
+                return NotFound("This is not the user you are looking for.");
+            }
+            return Ok(result);
+        }
     }
 }
