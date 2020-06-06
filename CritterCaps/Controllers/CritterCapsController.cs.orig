@@ -13,12 +13,14 @@ namespace CritterCaps.Controllers
     public class CritterCapsController : ControllerBase
     {
         ProductTypesRepository _productTypesRepository;
-        ProductRepository _productRepository;
+        ProductRepository _productRepository; 
+        UserRepository _UserRepository;
 
-        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository)
+        public CritterCapsController(ProductTypesRepository productTypesRepository, ProductRepository productRepository, UserRepository userRepository)
         {
             _productTypesRepository = productTypesRepository;
             _productRepository = productRepository;
+            _UserRepository = userRepository;
         }
 
         [HttpGet("productTypes")]
@@ -76,7 +78,30 @@ namespace CritterCaps.Controllers
         }
 
 <<<<<<< HEAD
+        [HttpGet("animals")]
+        public IActionResult GetAllAnimals()
+        {
+            var repo = new AnimalRepository();
+            var result = repo.GetAllAnimals();
+            if (!result.Any())
+            {
+                return NotFound("We don't like those animals");
 =======
+// GET ALL USERS ////
+        [HttpGet("user")]
+        public IActionResult GetAllUsers()
+        {
+            var result = _UserRepository.GetAllUsers();
+            if (!result.Any())
+            {
+                return NotFound("No users available");
+>>>>>>> 403d4d97fd290f9fd2a11ca3d5d08279034e01d8
+            }
+
+            return Ok(result);
+        }
+
+<<<<<<< HEAD
         [HttpGet("animal/{animalType}")]
         public IActionResult GetSingleAnimal(string animalType)
         {
@@ -89,6 +114,7 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
->>>>>>> master
+=======
+>>>>>>> 403d4d97fd290f9fd2a11ca3d5d08279034e01d8
     }
 }
