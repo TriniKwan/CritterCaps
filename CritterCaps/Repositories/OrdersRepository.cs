@@ -98,11 +98,26 @@ namespace CritterCaps.Repositories
             }
         }
 
+
+        public OrderWithBaseInfo GetBasicOrderInfo(int orderId)
+        {
+            var sql = $@"SELECT OrderId, UserId, InvoiceDate, Total
+                            FROM [ORDER]
+                        WHERE OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var order = db.QueryFirstOrDefault<OrderWithBaseInfo>(sql, new { OrderId = orderId });
+
+                return order;
+            }
+        }
+
         public IEnumerable<OrderCheck> CheckExistingOrder(int userId)
         {
             var sql = @"SELECT *
                         FROM [Order]
-                        WHERE Total IS NULL AND UserId = @userId";
+                        WHERE PaymentType IS NULL AND UserId = @userId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
@@ -188,7 +203,28 @@ namespace CritterCaps.Repositories
             }
         }
 
-        //public OrderWithLineItems CompleteOrder(int orderId, int)
+        public OrderWithLineItems CompleteOrder(int orderId, string type)
+        {
+            var orderToUpdate = GetBasicOrderInfo(orderId);
+            var paymentTypeSql = $@"SELECT *
+                                    FROM PaymentType
+                                    WHERE [Type] = @type AND UserId = {orderToUpdate.UserId}";
+            var sql = $@"Update[Order]
+                        SET PaymentType = @paymentType
+                        WHERE OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var payment = db.QueryFirstOrDefault<PaymentType>(paymentTypeSql, new { Type = type });
+                var paymentType = payment.PaymentID;
+
+                db.QueryFirstOrDefault(sql, new { OrderId = orderId, PaymentType = paymentType });
+
+                var completedOrder = GetSingleOrder(orderId);
+
+                return completedOrder;
+            }
+        }
 
     }
 }

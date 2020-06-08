@@ -76,19 +76,19 @@ namespace CritterCaps.Controllers
             return NotFound("That order is already completed.");
         }
 
-        ////Complete order
-        //[HttpGet("completeOrder/orderId/{orderId}/paymentType/{paymentType}")]
-        //public IActionResult CompleteOrder(int orderId, string paymentType)
-        //{
-        //    var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
-        //    if (openOrder.Any())
-        //    {
-        //        var result = _ordersRepository.AddPayment(orderId, paymentType);
+        //Complete order
+        [HttpGet("completeOrder/orderId/{orderId}/paymentType/{paymentType}")]
+        public IActionResult CompleteOrder(int orderId, string paymentType)
+        {
+            var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
+            if (openOrder.Any())
+            {
+                var result = _ordersRepository.CompleteOrder(orderId, paymentType);
 
-        //        return Ok(result);
-        //    }
+                return Ok(result);
+            }
 
-        //    return NotFound("That order is already completed.");
-        //}
+            return NotFound("That order is already completed.");
+        }
     }
 }
