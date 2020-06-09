@@ -26,4 +26,12 @@ namespace CritterCaps.Models
         public int OrderId { get; set; }
         public DateTime InvoiceDate { get; set; }
     }
+
+    public class OrderWithBaseInfo
+    {
+        public int OrderId { get; set; }
+        public int UserId { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public decimal Total { get; set; }
+    }
 }
