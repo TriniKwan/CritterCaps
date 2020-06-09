@@ -7,6 +7,7 @@ namespace CritterCaps.Models
 {
     public class LineItem
     {
+        public int ProductId { get; set; }
         public string Title { get; set; }
         public decimal UnitPrice { get; set; }
     }
