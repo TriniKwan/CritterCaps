@@ -20,7 +20,7 @@ namespace CritterCaps.Repositories
 
         public PaymentType GetPaymentTypeById(int paymentId)
         {
-            var sql = @"SELECT PaymentId
+            var sql = @"SELECT *
                         FROM PaymentType
                         where PaymentID = @paymentId";
 

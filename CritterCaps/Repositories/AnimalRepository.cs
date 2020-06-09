@@ -32,7 +32,7 @@ namespace CritterCaps.Repositories
 
         public Animal GetSingleAnimal(string animalType)
         {
-            var sql = @"select AnimalType
+            var sql = @"select *
                         from AnimalType
                         where AnimalType like @animalType";
 
