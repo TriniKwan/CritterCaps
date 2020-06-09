@@ -350,6 +350,10 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Deletes all line items
+        /// </summary>
+        /// <param name="orderId">Order to delete items for</param>
         public void DeleteAllLineItems(int orderId)
         {
             var sql = @"DELETE
@@ -358,10 +362,15 @@ namespace CritterCaps.Repositories
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                db.ExecuteAsync(sql, new { OrderId = orderId });
+                db.Query(sql, new { OrderId = orderId });
             }
         }
 
+        /// <summary>
+        /// Deletes order and line items
+        /// </summary>
+        /// <param name="orderId">order to delete</param>
+        /// <returns>Task complete string</returns>
         public string DeleteOrder(int orderId)
         {
             var sql = @"DELETE
@@ -371,7 +380,9 @@ namespace CritterCaps.Repositories
             using (var db = new SqlConnection(ConnectionString))
             {
                 DeleteAllLineItems(orderId);
-                db.ExecuteAsync(sql, new { OrderId = orderId });
+                db.QueryFirstOrDefault(sql, new { OrderId = orderId });
+
+                return ($"Successfully deleted order number {orderId}");
             }
         }
     }

@@ -118,5 +118,20 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
+
+        //Delete order
+        [HttpGet("delete/orderId/{orderId}")]
+        public IActionResult DeleteOrder(int orderId)
+        {
+            var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
+            if (openOrder.Any())
+            {
+                var result = _ordersRepository.DeleteOrder(orderId);
+
+                return Ok(result);
+            }
+
+            return NotFound("You can not delete completed orders");
+        }
     }
 }
