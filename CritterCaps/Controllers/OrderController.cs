@@ -66,7 +66,7 @@ namespace CritterCaps.Controllers
         public IActionResult AddLineItem(int orderId, int productId)
         {
             var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
-            if(openOrder.Any())
+            if (openOrder.Any())
             {
                 var result = _ordersRepository.AddLineItem(orderId, productId);
 
@@ -89,6 +89,34 @@ namespace CritterCaps.Controllers
             }
 
             return NotFound("That order is already completed.");
+        }
+
+        //Delete line item
+        [HttpGet("removeItem/orderId/{orderId}/productId/{productId}")]
+        public IActionResult RemoveLineItem(int orderId, int productId)
+        {
+            var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
+            if (openOrder.Any())
+            {
+                var result = _ordersRepository.RemoveLineItem(orderId, productId);
+
+                return Ok(result);
+            }
+
+            return NotFound("That order is already completed.");
+        }
+
+        //Gets all pending orders
+        [HttpGet("pending")]
+        public IActionResult GetAllPendingOrders()
+        {
+            var result = _ordersRepository.GetAllPendingOrders();
+            if (!result.Any())
+            {
+                return NotFound("There are no open orders.");
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -19,6 +19,10 @@ namespace CritterCaps.Repositories
             ConnectionString = config.GetConnectionString("CritterCaps");
         }
 
+        /// <summary>
+        /// Gets all orders with User Name.
+        /// </summary>
+        /// <returns>All Orders</returns>
         public IEnumerable<Orders> GetAllOrders()
         {
             var sql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total, PaymentType.[Type] AS PaymentType
@@ -36,6 +40,11 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns a single order with line items and user name.
+        /// </summary>
+        /// <param name="orderId">Int that corresponds with an order ID.</param>
+        /// <returns>A single order with line items</returns>
         public OrderWithLineItems GetSingleOrder(int orderId)
         {
             var orderSql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total, PaymentType.[Type] AS PaymentType
@@ -46,7 +55,7 @@ namespace CritterCaps.Repositories
                             ON PaymentType.PaymentID = [Order].PaymentType
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -59,15 +68,23 @@ namespace CritterCaps.Repositories
                 var order = db.QueryFirstOrDefault<OrderWithLineItems>(orderSql, new { OrderId = orderId });
                 var lineItems = db.Query<LineItem>(lineItem, new { OrderId = orderId });
 
-                if (lineItems.Any())
+                if (order != null)
                 {
-                    order.LineItem = lineItems;
+                    if (lineItems.Any())
+                    {
+                        order.LineItem = lineItems;
+                    }
                 }
 
                 return order;
             }
         }
 
+        /// <summary>
+        /// Gets an order that is open with any existing line items.
+        /// </summary>
+        /// <param name="orderId">Int that corresponds with an order ID.</param>
+        /// <returns>A single order in progress with line items.</returns>
         public OrderInProgressWithLineItems GetPendingOrder(int orderId)
         {
             var orderSql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total
@@ -76,7 +93,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -98,7 +115,11 @@ namespace CritterCaps.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Gets the base order information - OrderId, UserId, InvoiceDate, and Total.
+        /// </summary>
+        /// <param name="orderId">Int that corresponds with an order ID.</param>
+        /// <returns>Basic order information</returns>
         public OrderWithBaseInfo GetBasicOrderInfo(int orderId)
         {
             var sql = $@"SELECT OrderId, UserId, InvoiceDate, Total
@@ -113,6 +134,11 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Checks for any existing orders that are open for a given user.
+        /// </summary>
+        /// <param name="userId">Int that corresponds with UserId</param>
+        /// <returns>Any open order for the given user.</returns>
         public IEnumerable<OrderCheck> CheckExistingOrder(int userId)
         {
             var sql = @"SELECT *
@@ -127,6 +153,11 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Creates a new order with no line items, total, or payment.
+        /// </summary>
+        /// <param name="userId">Int userId to associate with order</param>
+        /// <returns>New blank order</returns>
         public NewOrder CreateNewOrder(int userId)
         {
             var sql = $@"INSERT INTO [Order] (UserId, InvoiceDate)
@@ -150,6 +181,12 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Adds line items to an open order.
+        /// </summary>
+        /// <param name="orderId">Id for Order to add to</param>
+        /// <param name="productId">Id for product to add</param>
+        /// <returns>Order in progress with added line items</returns>
         public OrderInProgressWithLineItems AddLineItem(int orderId, int productId)
         {
             var sql = @"insert into LineItem (OrderId, ProductId, UnitPrice)
@@ -177,6 +214,11 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Check to see if an order is completed
+        /// </summary>
+        /// <param name="orderId">Int that corresponds with an order ID.</param>
+        /// <returns>Open order</returns>
         public IEnumerable<OrderCheck> CheckCompletedOrder(int orderId)
         {
             var sql = @"SELECT *
@@ -191,6 +233,11 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Updates the total
+        /// </summary>
+        /// <param name="total">Total passed down from AddLineItem</param>
+        /// <param name="orderId">Int Id for Order to update</param>
         public void UpdateTotal(decimal total, int orderId)
         {
             var sql = @"UPDATE[Order]
@@ -203,6 +250,12 @@ namespace CritterCaps.Repositories
             }
         }
 
+        /// <summary>
+        /// Completes order by adding paymentID to order.
+        /// </summary>
+        /// <param name="orderId">Order to update</param>
+        /// <param name="type">Type of payment (string)</param>
+        /// <returns>Completed order</returns>
         public OrderWithLineItems CompleteOrder(int orderId, string type)
         {
             var orderToUpdate = GetBasicOrderInfo(orderId);
@@ -226,5 +279,100 @@ namespace CritterCaps.Repositories
             }
         }
 
+
+        /// <summary>
+        /// Gets all pending orders
+        /// </summary>
+        /// <returns>All pending orders with line items</returns>
+        public IEnumerable<OrderInProgressWithLineItems> GetAllPendingOrders()
+        {
+            var orderSql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total
+                            FROM [ORDER]
+                            JOIN[User]
+                            ON[Order].UserId = [User].ID
+                            WHERE PaymentType IS NULL";
+
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice
+                            FROM [Order]
+	                            JOIN LineItem
+	                            ON [Order].OrderId = LineItem.OrderId
+	                            JOIN Products
+	                            ON LineItem.ProductId = Products.ProductId
+                            WHERE [Order].OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var orders = db.Query<OrderInProgressWithLineItems>(orderSql);
+
+                foreach (var order in orders)
+                {
+                    var lineItems = db.Query<LineItem>(lineItem, new { OrderId = order.OrderId });
+
+                    if (lineItems.Any())
+                    {
+                        order.LineItem = lineItems;
+                    }
+                }
+
+                return orders;
+            }
+        }
+
+        /// <summary>
+        /// Removes a single line item
+        /// </summary>
+        /// <param name="orderId">OrderID to remove from</param>
+        /// <param name="productId">ProductId to remove</param>
+        /// <returns>Updated order</returns>
+        public OrderInProgressWithLineItems RemoveLineItem(int orderId, int productId)
+        {
+            var sql = @"DELETE TOP(1)
+                        FROM LineItem
+                        WHERE OrderId = @orderId AND ProductId = @productId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
+
+
+                var order = GetPendingOrder(orderId);
+                decimal total = 0;
+
+                foreach (var item in order.LineItem)
+                {
+                    total += item.UnitPrice;
+                }
+
+                UpdateTotal(total, orderId);
+
+                var updatedOrder = GetPendingOrder(orderId);
+                return updatedOrder;
+            }
+        }
+
+        public void DeleteAllLineItems(int orderId)
+        {
+            var sql = @"DELETE
+                        FROM LineItem
+                        WHERE OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                db.ExecuteAsync(sql, new { OrderId = orderId });
+            }
+        }
+
+        public string DeleteOrder(int orderId)
+        {
+            var sql = @"DELETE
+                        FROM [Order]
+                        WHERE OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                DeleteAllLineItems(orderId);
+                db.ExecuteAsync(sql, new { OrderId = orderId });
+            }
+        }
     }
 }
