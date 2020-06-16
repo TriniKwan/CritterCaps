@@ -13,9 +13,10 @@ class Products extends React.Component {
   // getAllProducts = () => {
   //   pickupData
   //     .getProductsById(authData.getId())
-  //     .then((stuff) => this.setState({ stuff }))
+  //     .then((products) => this.setState({ products }))
   //     .catch((error) => console.error('product error', error));
   // };
+
 
   render() {
     const { productId } = this.state;
