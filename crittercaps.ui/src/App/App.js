@@ -13,6 +13,7 @@ import UserProfile from '../components/pages/UserProfile/UserProfile';
 import Orders from '../components/pages/Orders/Orders';
 import ShoppingCart from '../components/pages/ShoppingCart/ShoppingCart';
 import SingleProduct from '../components/pages/SingleProduct/SingleProduct';
+import Navbar from '../components/shared/Navbar/Navbar';
 
 const PublicRoute = ({ component: Component, authed, ...rest }) => {
   const routeChecker = (props) => (authed === false ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/', state: { from: props.location } }} />);
@@ -35,6 +36,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
+          <Navbar />
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
             <Route path="/products" exact component={Products} authed={authed} />
