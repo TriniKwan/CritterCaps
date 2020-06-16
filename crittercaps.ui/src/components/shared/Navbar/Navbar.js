@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../Navbar/Navbar.scss';
+import './Navbar.scss';
 
 class Navbar extends React.Component {
-    render() {
-        return (
+  render() {
+    return (
             <div className="Navbar">
                 <nav className="navbar navbar-expand-lg navbar-light fixed-top">
                 <Link className="navbar-brand" to="/">
@@ -34,8 +34,8 @@ class Navbar extends React.Component {
                 </div>
                 </nav>
             </div>
-        );
-    }
+    );
+  }
 }
 
 export default Navbar;

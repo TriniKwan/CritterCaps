@@ -1,14 +1,24 @@
 import React from 'react';
 import './Home.scss';
-import { Link } from 'react-router-dom';
+import productData from '../../../helpers/data/ProductData';
+import ProductCard from '../../shared/ProductCard/ProductCard';
 
 class Home extends React.Component {
+  state = {
+    products: [],
+  }
+
+  componentDidMount() {
+    productData.getNewestProducts()
+      .then((products) => this.setState({ products }))
+      .catch((error) => console.error(error, 'error from products'));
+  }
+
   render() {
+    const { products } = this.state;
     return (
-      <div className="Home">
-        <h1>Home</h1>
-        <Link to="/products" className="btn btn-primary">Products</Link>
-        <Link to="/userProfile" className="btn btn-secondary">User Profile</Link>
+      <div className="Products container">
+          { products.map((product) => <ProductCard key={product.productId} product={product} />) }
       </div>
     );
   }
