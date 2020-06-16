@@ -44,5 +44,18 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
+
+        //Get top20 newest products
+        [HttpGet("newest")]
+        public IActionResult GetTop20NewestProducts()
+        {
+            var result = _productRepository.GetTop20NewestProducts();
+            if (!result.Any())
+            {
+                return NotFound("No products available");
+            }
+
+            return Ok(result);
+        }
     }
 }
