@@ -55,7 +55,7 @@ namespace CritterCaps.Repositories
 
         public IEnumerable<ProductWithBasicInfo> GetTop20NewestProducts()
         {
-            var sql = @"Select TOP(20) ProductId, Title, Price, imageUrl, DateAdded
+            var sql = @"Select TOP(20) ProductId, Title, Price, imageUrl, Description, DateAdded
                         FROM Products
                         WHERE inStock = 1
                         ORDER BY DateAdded DESC";
