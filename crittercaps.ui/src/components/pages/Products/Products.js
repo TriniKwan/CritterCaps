@@ -3,9 +3,19 @@ import './Products.scss';
 import { Link } from 'react-router-dom';
 
 class Products extends React.Component {
+  // defining state for product
   state = {
     productId: 1,
   }
+
+  // ??
+
+  // getAllProducts = () => {
+  //   pickupData
+  //     .getProductsById(authData.getId())
+  //     .then((stuff) => this.setState({ stuff }))
+  //     .catch((error) => console.error('product error', error));
+  // };
 
   render() {
     const { productId } = this.state;
