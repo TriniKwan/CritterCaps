@@ -1,30 +1,28 @@
 import React from 'react';
 import './Products.scss';
-import { Link } from 'react-router-dom';
+import productData from '../../../helpers/data/ProductData';
+import ProductCard from '../../shared/ProductCard/ProductCard';
+
 
 class Products extends React.Component {
   // defining state for product
   state = {
-    productId: 1,
+    products: [],
   }
 
-  // ??
-
-  // getAllProducts = () => {
-  //   pickupData
-  //     .getProductsById(authData.getId())
-  //     .then((products) => this.setState({ products }))
-  //     .catch((error) => console.error('product error', error));
-  // };
-
+  componentDidMount() {
+   productData.getAllProducts()
+   .then((products) => this.setState({ products }))
+   .catch((error) => console.error('error from products', error));
+  };
 
   render() {
-    const { productId } = this.state;
+    const { products } = this.state;
 
     return (
       <div className="Products">
-        <h1>Products</h1>
-        <Link to={`/products/${productId}`} className="btn btn-primary">Single Product</Link>
+        <h1>Product Detail</h1>
+        { products.map((product) => <ProductCard key={product.productId} product={product} />) }
       </div>
     );
   }
