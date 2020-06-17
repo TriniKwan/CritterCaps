@@ -27,6 +27,17 @@ namespace CritterCaps.Controllers
         }
 
         [HttpGet("productType/{productType}")]
+        public IActionResult GetSingleProductType(int productType)
+        {
+            var result = _productTypesRepository.GetSingleProductType(productType);
+            if (result == null)
+            {
+                return NotFound("Oops! We haven't had time to craft that type of hat.");
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("productType/{productType}/products")]
         public IActionResult GetSingleProductTypeWithProducts(int productType)
         {
             var result = _productTypesRepository.GetSingleProductTypeWithProducts(productType);

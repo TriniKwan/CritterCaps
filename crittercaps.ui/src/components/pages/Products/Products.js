@@ -9,7 +9,8 @@ import ProductCard from '../../shared/ProductCard/ProductCard';
 
 class Products extends React.Component {
   state = {
-    productId: 1,
+    productId: 0,
+    productTypeId: 0,
     productTypes: [],
     products: [],
   }
@@ -35,9 +36,19 @@ class Products extends React.Component {
       .catch((errFromGetAllProducts) => console.error(errFromGetAllProducts));
   }
 
+  getSingleProductTypeWithProducts = (productTypeId) => {
+    productTypesData.getSingleProductTypeWithProducts(productTypeId)
+      .then((products) => {
+        this.setState({ products });
+      })
+      .catch((errFromSingleProductTypeWithProducts) => console.error(errFromSingleProductTypeWithProducts));
+  }
+
   clickEvent = (e) => {
-    // e.preventDefault();
-    console.log(e);
+    const { productTypeId } = this.state;
+    e.preventDefault();
+    this.setState({ productTypeId: e.target.eventKey });
+    this.getSingleProductTypeWithProducts(productTypeId);
   }
 
   render() {
@@ -55,8 +66,8 @@ class Products extends React.Component {
               Category
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-                {productTypes.map((productType) => <ProductTypesDropdown key={productType.productTypeId} productType={productType} clickEvent={this.clickEvent} />)}
+            <Dropdown.Menu onSelect={this.clickEvent}>
+              {productTypes.map((productType) => <ProductTypesDropdown key={productType.productTypeId} productType={productType} />)}
             </Dropdown.Menu>
           </Dropdown>
         </div>

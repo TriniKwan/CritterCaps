@@ -14,7 +14,9 @@ class ProductTypes extends React.Component {
 
     return (
       <div className="ProductTypes">
-        <Dropdown.Item eventKey={productType.id} onSelect={clickEvent}>{productType.category}</Dropdown.Item>
+        <Dropdown.Item eventKey={productType.productTypeId} value={productType.productTypeId}>
+            {productType.category}
+        </Dropdown.Item>
       </div>
     );
   }

@@ -12,6 +12,8 @@ const getAllProductTypes = () => new Promise((resolve, reject) => {
     .catch((errFromGetAllProductTypes) => reject(errFromGetAllProductTypes));
 });
 
-const getSingleProductTypeWithProducts = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}`);
+const getSingleProductTypeWithProducts = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}/products`);
 
-export default { getAllProductTypes, getSingleProductTypeWithProducts };
+const getSingleProductType = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}`);
+
+export default { getAllProductTypes, getSingleProductTypeWithProducts, getSingleProductType };

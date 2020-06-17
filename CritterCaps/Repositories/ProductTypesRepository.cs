@@ -54,5 +54,19 @@ namespace CritterCaps.Repositories
                 return singleProductType;
             }
         }
+
+        public ProductType GetSingleProductType(int productType)
+        {
+            var sql = @"select *
+                        from ProductType
+                        where ProductTypeId = @productType";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var singleProductType = db.QueryFirstOrDefault<ProductType>(sql, new { ProductType = productType });
+
+                return singleProductType;
+            }
+        }
     }
 }
