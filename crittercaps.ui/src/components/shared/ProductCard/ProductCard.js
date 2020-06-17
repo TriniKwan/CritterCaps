@@ -27,7 +27,7 @@ class ProductCard extends Component {
               <Card.Text>
                 {productPrice}
               </Card.Text>
-              <Button variant="primary">Buy Now</Button> { /* will be link to single product view */ }
+              <Button variant="primary" productId={productId}>Buy Now</Button> { /* will be link to single product view */ }
             </Card.Footer>
           </Card>
         </div>
