@@ -13,4 +13,14 @@ const getNewestProducts = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-export default { getNewestProducts };
+const getAllAvailableProducts = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/products/available`)
+    .then((result) => {
+      const availableProducts = result.data;
+
+      resolve(availableProducts);
+    })
+    .catch((error) => reject(error));
+});
+
+export default { getNewestProducts, getAllAvailableProducts };

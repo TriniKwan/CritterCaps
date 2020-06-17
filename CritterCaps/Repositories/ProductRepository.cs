@@ -67,5 +67,20 @@ namespace CritterCaps.Repositories
                 return products;
             }
         }
+
+        public IEnumerable<ProductWithBasicInfo> GetAllAvailableProducts()
+        {
+            var sql = @"Select ProductId, Title, Price, imageUrl, Description, DateAdded
+                        FROM Products
+                        WHERE inStock = 1
+                        ORDER BY DateAdded DESC";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var availProducts = db.Query<ProductWithBasicInfo>(sql);
+
+                return availProducts;
+            }
+        }
     }
 }

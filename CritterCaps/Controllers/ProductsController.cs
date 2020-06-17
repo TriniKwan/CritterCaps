@@ -57,5 +57,18 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("available")]
+        public IActionResult GetAllAvailableProducts()
+        {
+            var results = _productRepository.GetAllAvailableProducts();
+
+            if(results == null)
+            {
+                return NotFound("Product is not available.");
+            }
+
+            return Ok(results);
+        }
     }
 }
