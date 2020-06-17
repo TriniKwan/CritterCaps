@@ -20,7 +20,7 @@
     "CritterCaps": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/crittercaps",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
