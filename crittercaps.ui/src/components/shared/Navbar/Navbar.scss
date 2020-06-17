@@ -2,10 +2,18 @@
     height: 75px;
 }
 
-.Navbar {
+.NavBar {
     margin: 0 0 75px 0;
 }
 
-.navbar {
-    background-color: white;
-}
+#googleLogo {
+    height: 20px;
+  }
+
+  .logInButton {
+    padding: 10px;
+  }
+
+  .logOutButton {
+    margin-left: 8px;
+  }
