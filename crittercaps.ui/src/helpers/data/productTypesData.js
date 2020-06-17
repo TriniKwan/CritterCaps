@@ -12,7 +12,7 @@ const getAllProductTypes = () => new Promise((resolve, reject) => {
     .catch((errFromGetAllProductTypes) => reject(errFromGetAllProductTypes));
 });
 
-const getSingleProductTypeWithProducts = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}/products`);
+const getSingleProductTypeWithProducts = (productTypeId) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productTypeId}/products`);
 
 const getSingleProductType = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}`);
 

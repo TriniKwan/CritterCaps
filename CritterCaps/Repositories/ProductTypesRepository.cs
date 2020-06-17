@@ -30,11 +30,11 @@ namespace CritterCaps.Repositories
             }
         }
 
-        public ProductTypeWithProducts GetSingleProductTypeWithProducts(int productType)
+        public ProductTypeWithProducts GetSingleProductTypeWithProducts(int productTypeId)
         {
             var sql = @"select *
                         from ProductType
-                        where ProductTypeId = @productType";
+                        where ProductTypeId = @productTypeId";
 
             var productsQuery = @"SELECT ProductId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
                         FROM Products
@@ -42,12 +42,12 @@ namespace CritterCaps.Repositories
 	                        ON ProductType.ProductTypeId = Products.ProductTypeId
 	                        JOIN AnimalType
 	                        ON AnimalType.AnimalId = Products.AnimalTypeId
-                            where ProductType.ProductTypeId = @productType";
+                            where ProductType.ProductTypeId = @productTypeId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var singleProductType = db.QueryFirstOrDefault<ProductTypeWithProducts>(sql, new { ProductType = productType });
-                var products = db.Query<Product>(productsQuery, new { ProductType = productType });
+                var singleProductType = db.QueryFirstOrDefault<ProductTypeWithProducts>(sql, new { ProductTypeId = productTypeId });
+                var products = db.Query<Product>(productsQuery, new { ProductTypeId = productTypeId });
 
                 singleProductType.Products = products;
 

@@ -37,10 +37,10 @@ namespace CritterCaps.Controllers
             return Ok(result);
         }
 
-        [HttpGet("productType/{productType}/products")]
-        public IActionResult GetSingleProductTypeWithProducts(int productType)
+        [HttpGet("productType/{productTypeId}/products")]
+        public IActionResult GetSingleProductTypeWithProducts(int productTypeId)
         {
-            var result = _productTypesRepository.GetSingleProductTypeWithProducts(productType);
+            var result = _productTypesRepository.GetSingleProductTypeWithProducts(productTypeId);
             if (result == null)
             {
                 return NotFound("Oops! We haven't had time to craft that type of hat.");
