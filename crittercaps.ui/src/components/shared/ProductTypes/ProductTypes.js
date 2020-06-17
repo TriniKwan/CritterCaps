@@ -11,7 +11,10 @@ class ProductTypes extends React.Component {
 
     return (
       <div className="ProductTypes">
-        <p>Category: {productType.category}</p>
+        <h1>Product Types</h1>
+        <div className="card-body">
+          <p>Category: {productType.category}</p>
+        </div>
       </div>
     );
   }

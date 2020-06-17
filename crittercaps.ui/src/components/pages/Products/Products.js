@@ -16,7 +16,10 @@ class Products extends React.Component {
 
   getAllProductTypes = () => {
     productTypesData.getAllProductTypes()
-      .then((productTypes) => this.setState((productTypes)))
+      .then((productTypes) => {
+        console.log(productTypes);
+        this.setState({ productTypes });
+      })
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
 
@@ -26,10 +29,10 @@ class Products extends React.Component {
     return (
       <div className="Products">
         <h1>Products</h1>
-        <Link to="/products/productTypes" className="btn btn-secondary">Product Types</Link>
         <Link to={`/products/${productId}`} className="btn btn-primary">Single Product</Link>
+        <Link to="/products/types/productTypes" className="btn btn-secondary">Product Types</Link>
         <div>
-          {productTypes.map((productType) => <ProductTypes key={productType.id} productType={productType} />)}
+          {productTypes.map((productType) => <ProductTypes key={productType.productTypeId} productType={productType} />)}
         </div>
       </div>
     );
