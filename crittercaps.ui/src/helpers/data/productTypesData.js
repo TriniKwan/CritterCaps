@@ -1,8 +1,10 @@
 import axios from 'axios';
-import { baseUrl } from '../apiKeys.json';
+import apiKeys from '../apiKeys.json';
+
+const { baseUrl } = apiKeys;
 
 const getAllProductTypes = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/productTypes`)
+  axios.get(`${baseUrl}/api/crittercaps/productTypes`)
     .then((result) => {
       const allProductTypes = result.data;
       resolve(allProductTypes);
@@ -10,4 +12,6 @@ const getAllProductTypes = () => new Promise((resolve, reject) => {
     .catch((errFromGetAllProductTypes) => reject(errFromGetAllProductTypes));
 });
 
-export default { getAllProductTypes };
+const getSingleProductTypeWithProducts = (productType) => axios.get(`${baseUrl}/api/crittercaps/productTypes/productType/${productType}`);
+
+export default { getAllProductTypes, getSingleProductTypeWithProducts };

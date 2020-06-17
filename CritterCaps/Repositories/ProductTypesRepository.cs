@@ -30,15 +30,27 @@ namespace CritterCaps.Repositories
             }
         }
 
-        public ProductType GetSingleProductType(string productType)
+        public ProductTypeWithProducts GetSingleProductTypeWithProducts(int productType)
         {
             var sql = @"select *
                         from ProductType
-                        where Category = @productType";
+                        where ProductTypeId = @productType";
+
+            var productsQuery = @"SELECT ProductId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
+                        FROM Products
+	                        JOIN ProductType
+	                        ON ProductType.ProductTypeId = Products.ProductTypeId
+	                        JOIN AnimalType
+	                        ON AnimalType.AnimalId = Products.AnimalTypeId
+                            where ProductType.ProductTypeId = @productType";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var singleProductType = db.QueryFirstOrDefault<ProductType>(sql, new { ProductType = productType });
+                var singleProductType = db.QueryFirstOrDefault<ProductTypeWithProducts>(sql, new { ProductType = productType });
+                var products = db.Query<Product>(productsQuery, new { ProductType = productType });
+
+                singleProductType.Products = products;
+
                 return singleProductType;
             }
         }

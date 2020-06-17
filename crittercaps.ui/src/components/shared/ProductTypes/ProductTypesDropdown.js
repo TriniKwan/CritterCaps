@@ -1,20 +1,20 @@
 import React from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
+import PropTypes from 'prop-types';
 import productTypeShape from '../../../helpers/propz/productTypeShape';
 
 class ProductTypes extends React.Component {
   static propTypes = {
     productType: productTypeShape.productTypeShape,
+    clickEvent: PropTypes.func,
   }
 
   render() {
-    const { productType } = this.props;
+    const { productType, clickEvent } = this.props;
 
     return (
       <div className="ProductTypes">
-        <h1>Product Types</h1>
-        <div className="card-body">
-          <p>Category: {productType.category}</p>
-        </div>
+        <Dropdown.Item eventKey={productType.id} onSelect={clickEvent}>{productType.category}</Dropdown.Item>
       </div>
     );
   }
