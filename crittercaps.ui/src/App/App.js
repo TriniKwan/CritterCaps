@@ -37,10 +37,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(() => {
-      if (sessionStorage.getItem('token')) {
-        this.setState({ authed: true });
-      } else if (!sessionStorage.getItem('token')) {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if (sessionStorage.getItem('token')) {
+          this.setState({ authed: true });
+        }
+      } else {
         this.setState({ authed: false });
       }
     });

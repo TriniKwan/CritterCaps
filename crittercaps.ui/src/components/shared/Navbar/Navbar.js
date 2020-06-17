@@ -16,7 +16,6 @@ class NavBar extends React.Component {
     logOut = (e) => {
       e.preventDefault();
       authData.logoutUser();
-      console.error('logged out');
     }
 
     render() {

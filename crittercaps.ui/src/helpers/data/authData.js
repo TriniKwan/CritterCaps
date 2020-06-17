@@ -36,9 +36,7 @@ const loginUser = () => {
   });
 };
 
-const logoutUser = () => {
-  firebase.auth().signOut();
-};
+const logoutUser = () => firebase.auth().signOut();
 
 const getUid = () => firebase.auth().currentUser.uid;
 
