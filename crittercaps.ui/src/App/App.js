@@ -37,10 +37,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+    firebase.auth().onAuthStateChanged(() => {
+      if (sessionStorage.getItem('token')) {
         this.setState({ authed: true });
-      } else {
+      } else if (!sessionStorage.getItem('token')) {
         this.setState({ authed: false });
       }
     });
@@ -54,7 +54,7 @@ class App extends React.Component {
         <Router>
           <NavBar authed={authed} />
           <Switch>
-            <PublicRoute path="/" exact component={Home} authed={authed} />
+            <Route path="/" exact component={Home} authed={authed} />
             <Route path="/products" exact component={Products} authed={authed} />
             <Route path="/userProfile" exact component={UserProfile} authed={authed} />
             <Route path="/userProfile/orders" exact component={Orders} authed={authed} />

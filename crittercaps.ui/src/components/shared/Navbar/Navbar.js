@@ -6,7 +6,6 @@ import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import Login from '../../pages/Login/Login';
-import 'firebase/auth';
 import authData from '../../../helpers/data/authData';
 
 class NavBar extends React.Component {
@@ -17,6 +16,7 @@ class NavBar extends React.Component {
     logOut = (e) => {
       e.preventDefault();
       authData.logoutUser();
+      console.error('logged out');
     }
 
     render() {
