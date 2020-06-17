@@ -13,22 +13,14 @@ const getNewestProducts = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getAllProducts = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/products`)
+const getAllAvailableProducts = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/products/available`)
     .then((result) => {
-      const allProducts = result.data;
-      resolve(allProducts);
+      const availableProducts = result.data;
+
+      resolve(availableProducts);
     })
-    .catch((errFromAllProducts) => reject(errFromAllProducts));
+    .catch((error) => reject(error));
 });
 
-const getSingleProduct = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/products/product/{productId}`)
-    .then((result) => {
-      const singleProduct = result.data;
-      resolve(singleProduct);
-    })
-    .catch((errFromSingleProduct) => reject(errFromSingleProduct));
-});
-
-export default { getNewestProducts, getAllProducts, getSingleProduct };
+export default { getNewestProducts, getAllAvailableProducts };

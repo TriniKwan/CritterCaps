@@ -29,11 +29,9 @@ class Products extends React.Component {
   }
 
   getAllProducts = () => {
-    ProductData.getAllProducts()
-      .then((products) => {
-        this.setState({ products });
-      })
-      .catch((errFromGetAllProducts) => console.error(errFromGetAllProducts));
+      ProductData.getAllAvailableProducts()
+          .then((products) => this.setState({ products }))
+          .catch((error) => console.error(error, 'error from allProducts'));
   }
 
   getSingleProductTypeWithProducts = (productTypeId) => {
@@ -51,6 +49,8 @@ class Products extends React.Component {
     this.getSingleProductTypeWithProducts(productTypeId);
   }
 
+
+  
   render() {
     const { productId, productTypes, products } = this.state;
 
@@ -71,9 +71,8 @@ class Products extends React.Component {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className="productSection">
-          {products.map((product) => <ProductCard key={product.productId} product={product} />)}
-        </div>
+        { products.map((product) => <ProductCard key={product.productId} product={product} />) };
+        {/* <Link to={`/products/${productId}`} className="btn btn-primary">Single Product</Link> */}
       </div>
     );
   }
