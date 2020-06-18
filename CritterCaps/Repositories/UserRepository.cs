@@ -46,6 +46,34 @@ namespace CritterCaps.Repositories
                 return user;
             }
         }
+
+        public User GetUserByUid(string uid)
+        {
+            var sql = @"SELECT *
+                       FROM [User]
+                       WHERE [UID] = @uid";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { UID = uid };
+                var user = db.QueryFirstOrDefault<User>(sql, parameters);
+
+                return user;
+            }
+        }
+
+        public User Add(User user)
+        {
+            var sql = @"INSERT INTO [User](FirstName, LastName, AccountDate, Administrator, [UID], Email)
+                        OUTPUT INSERTED.*
+                        VALUES(@FirstName, @LastName, @AccountDate, @Administrator, @[UID], @Email)";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<User>(sql, user);
+                return result;
+            }
+        }
     }
 }
     
