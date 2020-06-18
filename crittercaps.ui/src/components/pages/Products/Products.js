@@ -9,8 +9,8 @@ class Products extends React.Component {
   state = {
     productId: '',
     productTypes: [],
+    originalProducts: [],
     products: [],
-    searchField: '',
   }
 
   componentDidMount() {
@@ -26,9 +26,12 @@ class Products extends React.Component {
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
 
+  // set state to products and originalProducts
+  // products array will be manipulated by search bar and ultimately what will be printed on page
+  // originalProducts will be untouched so it can be used to reset the state of products
   getAllAvailableProducts = () => {
     ProductData.getAllAvailableProducts()
-      .then((products) => this.setState({ products }))
+      .then((products) => this.setState({ products, originalProducts: products }))
       .catch((error) => console.error(error, 'error from allProducts'));
   }
 
@@ -51,20 +54,17 @@ class Products extends React.Component {
   }
 
   handleSearchEvent = (e) => {
-    // let originalProducts = [];
-    const { searchField, products } = this.state;
-    // console.log('products', originalProducts);
-    console.log('value', e.target.value);
-    this.setState({ searchField: e.target.value });
-    console.log('search', searchField);
-    if (searchField === '') {
-      // originalProducts = this.getAllAvailableProducts();
-      // this.setState({ products: originalProducts });
-      this.getAllAvailableProducts();
-    } else if (searchField !== '') {
-      const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
-      this.setState({ products: filteredProducts });
+    const searchField = e.target.value;
+    const { originalProducts } = this.state;
+    if (searchField !== '') {
+      this.setState({ products: this.filterProductsByTitle(originalProducts, searchField) });
+    } else {
+      this.setState({ products: originalProducts });
     }
+  }
+
+  filterProductsByTitle(products, term) {
+    return products.filter((product) => product.title.toLowerCase().includes(term.toLowerCase()));
   }
 
   render() {
@@ -100,7 +100,7 @@ class Products extends React.Component {
           </div>
         </div>
         <div className="productCardSection">
-          {products.map((product) => <ProductCard key={product.productId} product={product} />) };
+          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} />) };
         </div>
       </div>
     );
