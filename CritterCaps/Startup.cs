@@ -27,6 +27,10 @@ namespace CritterCaps
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options =>
+                options.AddPolicy("ItsAllGood",
+                    builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin())
+                );
             services.AddTransient<ProductTypesRepository>();
             services.AddTransient<ProductRepository>();
             services.AddTransient<UserRepository>();
