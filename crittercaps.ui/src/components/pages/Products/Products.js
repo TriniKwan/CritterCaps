@@ -15,7 +15,7 @@ class Products extends React.Component {
 
   componentDidMount() {
     this.getAllProductTypes();
-    this.getAllProducts();
+    this.getAllAvailableProducts();
   }
 
   getAllProductTypes = () => {
@@ -26,7 +26,7 @@ class Products extends React.Component {
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
 
-  getAllProducts = () => {
+  getAllAvailableProducts = () => {
     ProductData.getAllAvailableProducts()
       .then((products) => this.setState({ products }))
       .catch((error) => console.error(error, 'error from allProducts'));
@@ -43,23 +43,28 @@ class Products extends React.Component {
   clickEvent = (e) => {
     e.preventDefault();
     const productTypeId = e.target.value;
-    this.getSingleProductTypeWithProducts(productTypeId);
+    if (productTypeId === 'all') {
+      this.getAllAvailableProducts();
+    } else {
+      this.getSingleProductTypeWithProducts(productTypeId);
+    }
   }
 
   handleSearchEvent = (e) => {
-    let originalProducts = [];
+    // let originalProducts = [];
     const { searchField, products } = this.state;
     // console.log('products', originalProducts);
     console.log('value', e.target.value);
     this.setState({ searchField: e.target.value });
     console.log('search', searchField);
     if (searchField === '') {
-      originalProducts = this.getAllProducts();
-      this.setState({ products: originalProducts });
+      // originalProducts = this.getAllAvailableProducts();
+      // this.setState({ products: originalProducts });
+      this.getAllAvailableProducts();
     } else if (searchField !== '') {
       const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
       this.setState({ products: filteredProducts });
-    } 
+    }
   }
 
   render() {
@@ -88,6 +93,7 @@ class Products extends React.Component {
                   onChange={this.clickEvent}
                   >
                   <option>Choose One</option>
+                  <option value='all'>All Categories</option>
                   {productTypes.map((productType) => <option key={productType.productTypeId} value={productType.productTypeId} >{productType.category}</option>)}
               </select>
             </div>
