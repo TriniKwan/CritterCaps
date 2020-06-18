@@ -47,12 +47,19 @@ class Products extends React.Component {
   }
 
   handleSearchEvent = (e) => {
+    let originalProducts = [];
     const { searchField, products } = this.state;
+    // console.log('products', originalProducts);
     console.log('value', e.target.value);
     this.setState({ searchField: e.target.value });
     console.log('search', searchField);
-    const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
-    this.setState({ products: filteredProducts });
+    if (searchField === '') {
+      originalProducts = this.getAllProducts();
+      this.setState({ products: originalProducts });
+    } else if (searchField !== '') {
+      const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
+      this.setState({ products: filteredProducts });
+    } 
   }
 
   render() {
