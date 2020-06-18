@@ -62,8 +62,10 @@ class NavBar extends React.Component {
                         <Nav className="ml-auto">
                             <Link className="nav-link" id="navvy-link" to="/">Home</Link>
                             <Link className="nav-link" id="navvy-link" to="/products">Hats</Link>
-                            <Link className="nav-link" id="navvy-link" to="/userProfile">Profile</Link>
                             <Link className="nav-link" id="navvy-link" to="/userProfile/shoppingCart">Shopping Cart</Link>
+                            { authed
+                              ? (<Link className="nav-link" id="navvy-link" to="/userProfile">Profile</Link>)
+                              : ('') }
                             { authed
                               ? (<Button variant="dark" onClick={this.logOut} className="logOutButton">Log Out</Button>)
                               : (<Login />) }
