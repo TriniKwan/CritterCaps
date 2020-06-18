@@ -59,5 +59,17 @@ namespace CritterCaps.Controllers
             return NotFound("Could not create a new account. User already exists");
         }
 
+        //Get user by UID //
+        [HttpGet("uid/{uid}")]
+        public IActionResult GetUserByUid(string uid)
+        {
+            var result = _UserRepository.GetUserByUid(uid);
+            if (result == null)
+            {
+                return NotFound("This is not the user you are looking for.");
+            }
+            return Ok(result);
+        }
+
     }
 }

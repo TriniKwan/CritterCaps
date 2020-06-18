@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.scss';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
@@ -13,9 +15,35 @@ class NavBar extends React.Component {
       authed: PropTypes.bool,
     }
 
+    state = {
+      userId: '',
+      noProfile: true,
+    }
+
+    checkUser = () => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.setState({ userId: user.uid });
+          authData.getUserByUid(this.state.userId)
+            .then((response) => {
+              if (response.length < 1) {
+                this.setState({ noProfile: true });
+              } else {
+                this.setState({ noProfile: false });
+              }
+            })
+            .catch((error) => console.error('err from check profile', error));
+        }
+      });
+    }
+
     logOut = (e) => {
       e.preventDefault();
       authData.logoutUser();
+    }
+
+    componentDidMount() {
+      this.checkUser();
     }
 
     render() {
