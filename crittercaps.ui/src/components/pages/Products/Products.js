@@ -1,6 +1,6 @@
 import React from 'react';
 import './Products.scss';
-import { Link } from 'react-router-dom';
+import SearchBox from '../../shared/SearchBox/SearchBox';
 import productTypesData from '../../../helpers/data/productTypesData';
 import ProductData from '../../../helpers/data/ProductData';
 import ProductCard from '../../shared/ProductCard/ProductCard';
@@ -10,6 +10,7 @@ class Products extends React.Component {
     productId: '',
     productTypes: [],
     products: [],
+    searchField: '',
   }
 
   componentDidMount() {
@@ -45,14 +46,29 @@ class Products extends React.Component {
     this.getSingleProductTypeWithProducts(productTypeId);
   }
 
+  handleSearchEvent = (e) => {
+    const { searchField, products } = this.state;
+    this.setState({ searchField: e.target.value });
+    const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
+    this.setState({ products: filteredProducts });
+  }
+
   render() {
-    const { productId, productTypes, products } = this.state;
+    const {
+      productId,
+      productTypes,
+      products,
+      searchField,
+    } = this.state;
 
     return (
       <div className="ProductsPage">
         <h1>Products</h1>
-        <div className="buttonSection">
-          <Link to={`/products/${productId}`} className="btn btn-primary">Single Product</Link>
+        <div className="searchSection">
+          <SearchBox
+            placeholder='search'
+            handleSearchEvent={this.handleSearchEvent}
+          />
         </div>
         <div className="dropdownSection">
           <div className="form-inline">
