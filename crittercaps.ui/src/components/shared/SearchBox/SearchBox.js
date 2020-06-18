@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class SearchBox extends React.Component {
-  propTypes = {
-    placeholder: this.props,
+  static propTypes = {
     handleSearchEvent: PropTypes.func,
   }
 

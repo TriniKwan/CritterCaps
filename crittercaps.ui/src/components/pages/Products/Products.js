@@ -47,8 +47,10 @@ class Products extends React.Component {
   }
 
   handleSearchEvent = (e) => {
-    const { products } = this.state;
-    const searchField = e.target.value;
+    const { searchField, products } = this.state;
+    console.log('value', e.target.value);
+    this.setState({ searchField: e.target.value });
+    console.log('search', searchField);
     const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchField.toLowerCase()));
     this.setState({ products: filteredProducts });
   }
