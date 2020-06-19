@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import Login from '../../pages/Login/Login';
 import authData from '../../../helpers/data/authData';
+import RegistrationForm from '../../pages/RegistrationForm/RegistrationForm';
 
 class NavBar extends React.Component {
     static propTypes = {
@@ -18,7 +19,10 @@ class NavBar extends React.Component {
     state = {
       userId: '',
       noProfile: true,
+      show: false,
     }
+
+    handleClose = () => this.setState({ show: false });
 
     checkUser = () => {
       firebase.auth().onAuthStateChanged((user) => {
@@ -28,6 +32,7 @@ class NavBar extends React.Component {
             .then((response) => {
               if (response.length < 1) {
                 this.setState({ noProfile: true });
+                this.setState({ show: true });
               } else {
                 this.setState({ noProfile: false });
               }
@@ -63,6 +68,11 @@ class NavBar extends React.Component {
                             <Link className="nav-link" id="navvy-link" to="/">Home</Link>
                             <Link className="nav-link" id="navvy-link" to="/products">Hats</Link>
                             <Link className="nav-link" id="navvy-link" to="/userProfile/shoppingCart">Shopping Cart</Link>
+                            {
+                                authed && this.state.noProfile
+                                  ? <RegistrationForm show={this.state.show} edit={false} handleClose={this.handleClose} />
+                                  : ('')
+                            }
                             { authed
                               ? (<Link className="nav-link" id="navvy-link" to="/userProfile">Profile</Link>)
                               : ('') }

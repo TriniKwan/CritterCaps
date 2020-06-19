@@ -64,12 +64,7 @@ namespace CritterCaps.Controllers
         public IActionResult GetUserByUid(string uid)
         {
             var result = _UserRepository.GetUserByUid(uid);
-            if (result == null)
-            {
-                return NotFound("This is not the user you are looking for.");
-            }
             return Ok(result);
         }
-
     }
 }
