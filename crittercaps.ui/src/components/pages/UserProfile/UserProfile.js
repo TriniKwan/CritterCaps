@@ -17,7 +17,6 @@ class UserProfile extends React.Component {
         <h1>User Profile</h1>
         <Link to="/userProfile/orders" className="btn btn-primary">Orders</Link>
         <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
-        {/* { product.map((product) => <ProductCard key={product.productId} product={product} />) } */}
       </div>
     );
   }
