@@ -3,18 +3,15 @@ import './UserProfile.scss';
 import { Link } from 'react-router-dom';
 
 class UserProfile extends React.Component {
-  state = {
-    users: [],
-  }
-
   // id, firstName, lastName, accountDate, administrator
 
   render() {
-    const { users } = this.state;
+    const { user } = this.props;
 
     return (
       <div className="UserProfile">
         <h1>User Profile</h1>
+        <h2>{ user }</h2>
         <Link to="/userProfile/orders" className="btn btn-primary">Orders</Link>
         <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
       </div>
