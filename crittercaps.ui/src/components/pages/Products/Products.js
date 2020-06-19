@@ -1,6 +1,6 @@
 import React from 'react';
 import './Products.scss';
-import { Link } from 'react-router-dom';
+import SearchBox from '../../shared/SearchBox/SearchBox';
 import productTypesData from '../../../helpers/data/productTypesData';
 import ProductData from '../../../helpers/data/ProductData';
 import ProductCard from '../../shared/ProductCard/ProductCard';
@@ -10,12 +10,13 @@ class Products extends React.Component {
   state = {
     productId: '',
     productTypes: [],
+    originalProducts: [],
     products: [],
   }
 
   componentDidMount() {
     this.getAllProductTypes();
-    this.getAllProducts();
+    this.getAllAvailableProducts();
   }
 
   getAllProductTypes = () => {
@@ -26,9 +27,12 @@ class Products extends React.Component {
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
 
-  getAllProducts = () => {
+  // set state to products and originalProducts
+  // products array will be manipulated by search bar and ultimately what will be printed on page
+  // originalProducts will be untouched so it can be used to reset the state of products
+  getAllAvailableProducts = () => {
     ProductData.getAllAvailableProducts()
-      .then((products) => this.setState({ products }))
+      .then((products) => this.setState({ products, originalProducts: products }))
       .catch((error) => console.error(error, 'error from allProducts'));
   }
 
@@ -43,17 +47,41 @@ class Products extends React.Component {
   clickEvent = (e) => {
     e.preventDefault();
     const productTypeId = e.target.value;
-    this.getSingleProductTypeWithProducts(productTypeId);
+    if (productTypeId === 'all') {
+      this.getAllAvailableProducts();
+    } else {
+      this.getSingleProductTypeWithProducts(productTypeId);
+    }
+  }
+
+  handleSearchEvent = (e) => {
+    const searchField = e.target.value;
+    const { originalProducts } = this.state;
+    if (searchField !== '') {
+      this.setState({ products: this.filterProductsByTitle(originalProducts, searchField) });
+    } else {
+      this.setState({ products: originalProducts });
+    }
+  }
+
+  filterProductsByTitle(products, term) {
+    return products.filter((product) => product.title.toLowerCase().includes(term.toLowerCase()));
   }
 
   render() {
-    const { productId, productTypes, products } = this.state;
+    const {
+      productTypes,
+      products,
+    } = this.state;
 
     return (
       <div className="ProductsPage">
         <h1>Products</h1>
-        <div className="buttonSection">
-          <Link to={`/products/${productId}`} className="btn btn-primary">Single Product</Link>
+        <div className="searchSection">
+          <SearchBox
+            placeholder='search'
+            handleSearchEvent={this.handleSearchEvent}
+          />
         </div>
         <div className="dropdownSection">
           <div className="form-inline">
@@ -66,13 +94,14 @@ class Products extends React.Component {
                   onChange={this.clickEvent}
                   >
                   <option>Choose One</option>
+                  <option value='all'>All Categories</option>
                   {productTypes.map((productType) => <option key={productType.productTypeId} value={productType.productTypeId} >{productType.category}</option>)}
               </select>
             </div>
           </div>
         </div>
         <div className="productCardSection">
-          {products.map((product) => <ProductCard key={product.productId} product={product} />) };
+          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} />) };
         </div>
       </div>
     );
