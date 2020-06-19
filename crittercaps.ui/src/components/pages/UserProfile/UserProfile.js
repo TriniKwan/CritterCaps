@@ -7,6 +7,8 @@ class UserProfile extends React.Component {
     users: [],
   }
 
+  // id, firstName, lastName, accountDate, administrator
+
   render() {
     const { users } = this.state;
 
