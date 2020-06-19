@@ -6,6 +6,7 @@ import ProductData from '../../../helpers/data/ProductData';
 import ProductCard from '../../shared/ProductCard/ProductCard';
 
 class Products extends React.Component {
+  // defining state for product
   state = {
     productId: '',
     productTypes: [],
