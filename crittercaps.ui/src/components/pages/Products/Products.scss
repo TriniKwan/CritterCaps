@@ -1,0 +1,11 @@
+.ProductsPage {
+  margin-top: 6em;
+  .categoryDropdown {
+    margin-left: 1.5em;
+  }
+  .productCardSection {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+}

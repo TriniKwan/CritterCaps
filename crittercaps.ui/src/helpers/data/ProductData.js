@@ -1,5 +1,5 @@
 import axios from 'axios';
-import apiKeys from '../apikeys.json';
+import apiKeys from '../apiKeys.json';
 
 const { baseUrl } = apiKeys;
 
@@ -24,7 +24,7 @@ const getAllAvailableProducts = () => new Promise((resolve, reject) => {
 });
 
 const getSingleProduct = (productId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/product/${productId}`)
+  axios.get(`${baseUrl}/api/crittercaps/products/product/${productId}`)
     .then((result) => {
       const singleProduct = result.data;
 
