@@ -46,7 +46,7 @@ namespace CritterCaps.Controllers
         }
 
         // Create New User //
-        [HttpPost("new")]
+        [HttpPost()]
         public IActionResult CreateNewUser(User userToAdd)
         {
             var existingUser = _UserRepository.GetUserByUid(userToAdd.UID);
@@ -56,7 +56,7 @@ namespace CritterCaps.Controllers
                 return Created("", newUser);
             }
 
-            return NotFound("Could not create a new account. User already exists");
+            return Ok(existingUser);
         }
 
         //Get user by UID //

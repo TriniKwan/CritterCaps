@@ -62,11 +62,12 @@ namespace CritterCaps.Repositories
             }
         }
 
+
         public User Add(User user)
         {
             var sql = @"INSERT INTO [User](FirstName, LastName, AccountDate, Administrator, [UID], Email)
                         OUTPUT INSERTED.*
-                        VALUES(@FirstName, @LastName, @AccountDate, @Administrator, @[UID], @Email)";
+                        VALUES(@FirstName, @LastName, GetDate(), @Administrator, @UID, @Email)";
 
             using (var db = new SqlConnection(ConnectionString))
             {

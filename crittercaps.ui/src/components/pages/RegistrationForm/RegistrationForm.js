@@ -11,7 +11,6 @@ class RegistrationForm extends React.Component {
   state = {
     firstName: '',
     lastName: '',
-    accountDate: '',
     email: '',
     administrator: false,
     emailExists: false,
@@ -24,7 +23,6 @@ class RegistrationForm extends React.Component {
 
   componentDidMount() {
     this.setUserNameAndEmailFromGoogleToken();
-    this.setAccountDate();
   }
 
   // Sets the user name and email from Google info
@@ -42,20 +40,18 @@ class RegistrationForm extends React.Component {
   }
 
   // Saves the new user to the database
-  saveUserProfileEvent = () => {
+  saveUserProfileEvent = (e) => {
+    e.preventDefault();
     const newProfile = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
-      accountDate: this.state.accountDate,
       administrator: this.state.administrator,
       uid: authData.getUid(),
       email: this.state.email,
     };
-
-    console.error(newProfile);
-    // authData.registerUser(newProfile)
-    //   .then(() => this.props.handleClose())
-    //   .catch((error) => console.error('err from save profile', error));
+    authData.registerUser(newProfile)
+      .then(() => this.props.handleClose())
+      .catch((error) => console.error('err from save profile', error));
   }
 
   firstNameChange = (e) => {
@@ -71,12 +67,6 @@ class RegistrationForm extends React.Component {
   emailChange = (e) => {
     e.preventDefault();
     this.setState({ email: e.target.value });
-  }
-
-  setAccountDate = () => {
-    const date = new Date();
-    const today = `${date.getFullYear()}-${date.getDate()}-${date.getMonth() + 1}`;
-    this.setState({ accountDate: today });
   }
 
   render() {
