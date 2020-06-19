@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './ProductCard.scss';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
 class ProductCard extends Component {
   render() {
@@ -27,7 +28,7 @@ class ProductCard extends Component {
               <Card.Text>
                 {productPrice}
               </Card.Text>
-              <Button variant="primary">Buy Now</Button> { /* will be link to single product view */ }
+              <Link to={`/products/${productId}`} className="primary">Buy Now</Link>
             </Card.Footer>
           </Card>
         </div>

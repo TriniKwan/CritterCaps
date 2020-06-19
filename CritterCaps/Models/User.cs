@@ -12,5 +12,7 @@ namespace CritterCaps.Models
         public string LastName { get; set; }
         public DateTime AccountDate { get; set; }
         public bool Administrator { get; set; }
+        public string UID { get; set; }
+        public string Email { get; set; }
     }
 }
