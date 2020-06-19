@@ -25,4 +25,5 @@ yarn-error.log*
 package-lock.json
 
 serviceWorker.js
-apiKeys.json
+src/helpers/apiKeys.json
+
