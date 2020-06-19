@@ -62,6 +62,21 @@ namespace CritterCaps.Repositories
             }
         }
 
+        public User GetUserByEmail(string email)
+        {
+            var sql = @"SELECT *
+                       FROM [User]
+                       WHERE Email = @email";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new { Email = email };
+                var user = db.QueryFirstOrDefault<User>(sql, parameters);
+
+                return user;
+            }
+        }
+
 
         public User Add(User user)
         {

@@ -66,5 +66,17 @@ namespace CritterCaps.Controllers
             var result = _UserRepository.GetUserByUid(uid);
             return Ok(result);
         }
+
+        // GET USER By EMAIL //
+        [HttpGet("email/{email}")]
+        public IActionResult GetUserByEmail(string email)
+        {
+            var result = _UserRepository.GetUserByEmail(email); ;
+            if (result == null)
+            {
+                return NotFound("This is not the user you are looking for.");
+            }
+            return Ok(result);
+        }
     }
 }
