@@ -1,48 +1,126 @@
 import React from 'react';
+import './EditProduct.scss';
 import { Link } from 'react-router-dom';
-import Card from 'react-bootstrap/Card';
 import ProductData from '../../../helpers/data/ProductData';
 
 class EditProduct extends React.Component {
   state = {
-    product: {},
+    singleProduct: {},
+    hatName: '',
+    description: '',
+    quantity: '',
+    price: '',
+    imageUrl: '',
   }
 
   componentDidMount() {
     const { productId } = this.props.match.params;
     // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)
-      .then((product) => this.setState({ product }))
+      .then((product) => this.setState({
+        hatName: product.title, description: product.description, quantity: product.quantity, price: product.price, imageUrl: product.imageUrl, singleProduct: product,
+      }))
       .catch((error) => console.error(error, 'error from single product'));
   }
 
+  pictureChange = (e) => {
+    e.preventDefault();
+    this.setState({ imageUrl: e.target.value });
+  }
+
+  nameChange = (e) => {
+    e.preventDefault();
+    this.setState({ hatName: e.target.value });
+  }
+
+  descriptionChange = (e) => {
+    e.preventDefault();
+    this.setState({ description: e.target.value });
+  }
+
+  quantityChange = (e) => {
+    e.preventDefault();
+    this.setState({ quantity: e.target.value });
+  }
+
+  priceChange = (e) => {
+    e.preventDefault();
+    this.setState({ price: e.target.value });
+  }
+
+  updateProductEvent = (e) => {
+    e.preventDefault();
+  }
+
   render() {
-    const { product } = this.state;
-    const price = Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const {
+      singleProduct,
+      hatName,
+      description,
+      quantity,
+      imageUrl,
+      price,
+    } = this.state;
 
     return (
-      <div className="SingleProductCard m-2">
-       < div className="d-flex justify-content-center">
-            <Card style={{ width: '18rem' }} id={product} className="h-100" border="primary">
-            <Card.Img variant="top" src={product.imageUrl} />
-            <Card.Title>{product.title}</Card.Title>
-            <Card.Body>
-              <Card.Text>
-                Description: {product.description}
-              </Card.Text>
-              <Card.Text>
-                Quantity: {product.quantity}
-              </Card.Text>
-            </Card.Body>
-            <Card.Footer className="mb-0">
-              <Card.Text>
-                Price: {price}
-              </Card.Text>
-              <Link to={`/products/${product}`} className="primary">Add To Cart</Link>
-            </Card.Footer>
-          </Card>
-      </div>
-      </div>
+      <form className="EditProduct">
+      <div className="container editCompostForm">
+        <div className="form-group">
+          <label htmlFor="hat-image"><strong>Image URL</strong></label>
+          <input
+            input="text"
+            className="form-control"
+            id="hat-image"
+            placeholder="Place Image"
+            value={imageUrl}
+            onChange={this.pictureChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="hat-name"><strong>Name</strong></label>
+          <input
+            input="text"
+            className="form-control"
+            id="hat-name"
+            placeholder="Name hat"
+            value={hatName}
+            onChange={this.nameChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="hat-description"><strong>Description</strong></label>
+          <input
+            input="text"
+            className="form-control"
+            id="hat-description"
+            placeholder="Enter Description"
+            value={description}
+            onChange={this.descriptionChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="hat-quantity"><strong>Quantity</strong></label>
+          <input
+            input="text"
+            className="form-control"
+            id="hat-quantity"
+            placeholder="Enter quantity"
+            value={quantity}
+            onChange={this.quantityChange}
+          />
+        </div>
+        <label htmlFor="hat-price"><strong>Price</strong></label>
+          <input
+            input="text"
+            className="form-control"
+            id="hat-price"
+            placeholder="Enter price"
+            value={price}
+            onChange={this.priceChange}
+          />
+        </div>
+      <button className="btn btn-outline-dark updateButton" onClick={this.updateProductEvent}>Update</button>
+    </form>
     );
   }
 }
