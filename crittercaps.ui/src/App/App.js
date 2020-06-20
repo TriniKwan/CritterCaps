@@ -48,6 +48,10 @@ class App extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.setState({ authed: false });
+  }
+
   render() {
     const { authed } = this.state;
 
@@ -58,9 +62,9 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
             <Route path="/products" exact component={Products} authed={authed} />
-            <Route path="/userProfile" exact component={UserProfile} authed={authed} />
-            <Route path="/userProfile/orders" exact component={Orders} authed={authed} />
-            <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
+            <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
+            <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
+            <PrivateRoute path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
           </Switch>
         </Router>
