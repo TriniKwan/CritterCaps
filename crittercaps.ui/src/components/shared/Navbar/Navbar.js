@@ -14,6 +14,7 @@ import RegistrationForm from '../../pages/RegistrationForm/RegistrationForm';
 class NavBar extends React.Component {
     static propTypes = {
       authed: PropTypes.bool,
+      administrator: PropTypes.bool,
     }
 
     state = {
@@ -52,7 +53,7 @@ class NavBar extends React.Component {
     }
 
     render() {
-      const { authed } = this.props;
+      const { authed, administrator } = this.props;
 
       return (
             <div className="Navbar">
@@ -73,8 +74,11 @@ class NavBar extends React.Component {
                                   ? <RegistrationForm show={this.state.show} edit={false} handleClose={this.handleClose} />
                                   : ('')
                             }
-                            { authed
+                            { authed && !administrator
                               ? (<Link className="nav-link" id="navvy-link" to="/userProfile">Profile</Link>)
+                              : ('') }
+                            { authed && administrator
+                              ? (<Link className="nav-link" id="dashboard-link" to="/dashboard">Dashboard</Link>)
                               : ('') }
                             { authed
                               ? (<Button variant="dark" onClick={this.logOut} className="logOutButton">Log Out</Button>)
