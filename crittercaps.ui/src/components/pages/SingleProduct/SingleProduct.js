@@ -28,14 +28,16 @@ class SingleProduct extends React.Component {
             <Card.Img variant="top" src={product.imageUrl} />
             <Card.Title>{product.title}</Card.Title>
             <Card.Body>
-              {product.description}
               <Card.Text>
-              {product.quantity}
+                Description: {product.description}
+              </Card.Text>
+              <Card.Text>
+                Quantity: {product.quantity}
               </Card.Text>
             </Card.Body>
             <Card.Footer className="mb-0">
               <Card.Text>
-                {price}
+                Price: {price}
               </Card.Text>
               <Link to={`/products/${product}`} className="primary">Add To Cart</Link>
             </Card.Footer>

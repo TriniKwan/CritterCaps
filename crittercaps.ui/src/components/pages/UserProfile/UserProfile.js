@@ -1,7 +1,7 @@
 import React from 'react';
+import firebase from 'firebase';
 import './UserProfile.scss';
 import { Link } from 'react-router-dom';
-import firebase from 'firebase';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
 
