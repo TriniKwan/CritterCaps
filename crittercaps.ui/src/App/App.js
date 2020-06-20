@@ -25,7 +25,7 @@ const PublicRoute = ({ component: Component, authed, ...rest }) => {
 };
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
-  const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/welcome', state: { from: props.location } }} />);
+  const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/', state: { from: props.location } }} />);
   return <Route {...rest} render={(props) => routeChecker(props)} />;
 };
 
@@ -37,7 +37,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
@@ -46,6 +46,10 @@ class App extends React.Component {
         this.setState({ authed: false });
       }
     });
+  }
+
+  componentWillUnmount() {
+    this.removeListener();
   }
 
   render() {
@@ -58,8 +62,8 @@ class App extends React.Component {
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
             <Route path="/products" exact component={Products} authed={authed} />
-            <Route path="/userProfile" exact component={UserProfile} authed={authed} />
-            <Route path="/userProfile/orders" exact component={Orders} authed={authed} />
+            <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
+            <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
             <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
           </Switch>
