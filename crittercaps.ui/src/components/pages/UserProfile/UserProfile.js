@@ -1,9 +1,9 @@
 import React from 'react';
+import firebase from 'firebase';
 import './UserProfile.scss';
 import { Link } from 'react-router-dom';
-import authData from '../../../helpers/data/authData';
-import firebase from 'firebase';
 import Card from 'react-bootstrap/Card';
+import authData from '../../../helpers/data/authData';
 
 class UserProfile extends React.Component {
   state = {
@@ -19,7 +19,8 @@ class UserProfile extends React.Component {
             .then((userData) => this.setState({ userData }))
             .catch((error) => console.error(error, 'error from get user Data'));
         }
-    }});
+      }
+    });
   }
 
   componentDidMount() {
