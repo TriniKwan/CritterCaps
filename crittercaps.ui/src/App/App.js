@@ -34,14 +34,13 @@ firebaseConnection();
 class App extends React.Component {
   state = {
     authed: false,
-    user: '',
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (sessionStorage.getItem('token')) {
-          this.setState({ authed: true, user });
+          this.setState({ authed: true });
         }
       } else {
         this.setState({ authed: false });
@@ -50,7 +49,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { authed, user } = this.state;
+    const { authed } = this.state;
 
     return (
       <div className="App">
@@ -58,7 +57,7 @@ class App extends React.Component {
           <NavBar authed={authed} />
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
-            <Route path="/products" exact component={Products} authed={authed} user={user} />
+            <Route path="/products" exact component={Products} authed={authed} />
             <Route path="/userProfile" exact component={UserProfile} authed={authed} />
             <Route path="/userProfile/orders" exact component={Orders} authed={authed} />
             <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
