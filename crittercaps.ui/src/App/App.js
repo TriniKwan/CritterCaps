@@ -19,6 +19,7 @@ import ShoppingCart from '../components/pages/ShoppingCart/ShoppingCart';
 import SingleProduct from '../components/pages/SingleProduct/SingleProduct';
 import NavBar from '../components/shared/Navbar/Navbar';
 import Dashboard from '../components/pages/Dashboard/Dashboard';
+import EditProduct from '../components/pages/EditProduct/EditProduct';
 
 import authData from '../helpers/data/authData';
 
@@ -87,6 +88,7 @@ class App extends React.Component {
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
             <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
+            <PrivateRoute path="/products/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
           </Switch>
         </Router>
       </div>
