@@ -25,7 +25,7 @@ const PublicRoute = ({ component: Component, authed, ...rest }) => {
 };
 
 const PrivateRoute = ({ component: Component, authed, ...rest }) => {
-  const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/welcome', state: { from: props.location } }} />);
+  const routeChecker = (props) => (authed === true ? <Component {...props} {...rest}/> : <Redirect to={{ pathname: '/', state: { from: props.location } }} />);
   return <Route {...rest} render={(props) => routeChecker(props)} />;
 };
 
@@ -37,7 +37,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    this.removeListener = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
@@ -49,7 +49,7 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    this.setState({ authed: false });
+    this.removeListener();
   }
 
   render() {

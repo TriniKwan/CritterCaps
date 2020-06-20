@@ -18,6 +18,8 @@ class UserProfile extends React.Component {
           authData.getUserByUid(userUid)
             .then((userData) => this.setState({ userData }))
             .catch((error) => console.error(error, 'error from get user Data'));
+        } else {
+          this.setState({ userData: {} });
         }
       }
     });
@@ -25,10 +27,6 @@ class UserProfile extends React.Component {
 
   componentDidMount() {
     this.getUserData();
-  }
-
-  componentWillUnmount() {
-    this.setState({ userData: {} });
   }
 
   render() {
