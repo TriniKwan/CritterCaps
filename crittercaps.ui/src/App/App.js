@@ -64,7 +64,7 @@ class App extends React.Component {
             <Route path="/products" exact component={Products} authed={authed} />
             <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
-            <PrivateRoute path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
+            <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
           </Switch>
         </Router>
