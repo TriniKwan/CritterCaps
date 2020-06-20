@@ -53,7 +53,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { authed } = this.state;
+    const { authed, uid } = this.state;
 
     return (
       <div className="App">

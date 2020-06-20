@@ -17,7 +17,7 @@ class NavBar extends React.Component {
     }
 
     state = {
-      userId: '',
+      userId: this.props.uid,
       noProfile: true,
       show: false,
     }

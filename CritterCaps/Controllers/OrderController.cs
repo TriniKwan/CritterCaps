@@ -47,7 +47,7 @@ namespace CritterCaps.Controllers
         }
 
         //Create new order
-        [HttpGet("order/new/userId/{userId}")]
+        [HttpPost("order/new/userId/{userId}")]
         public IActionResult CreateNewOrder(int userId)
         {
             var existingOrder = _ordersRepository.CheckExistingOrder(userId);
@@ -62,7 +62,7 @@ namespace CritterCaps.Controllers
         }
 
         //Add items to an order
-        [HttpGet("addItem/orderId/{orderId}/productId/{productId}")]
+        [HttpPost("addItem/orderId/{orderId}/productId/{productId}")]
         public IActionResult AddLineItem(int orderId, int productId)
         {
             var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
@@ -116,6 +116,18 @@ namespace CritterCaps.Controllers
                 return NotFound("There are no open orders.");
             }
 
+            return Ok(result);
+        }
+
+        //Gets open order by UserId
+        [HttpGet("shoppingCart/{userId}")]
+        public IActionResult GetOpenShoppingCart(int userId)
+        {
+            var result = _ordersRepository.GetOpenOrderByUserId(userId);
+            if(result == null)
+            {
+                return NotFound("no open orders");
+            }
             return Ok(result);
         }
 
