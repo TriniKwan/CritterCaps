@@ -53,6 +53,19 @@ namespace CritterCaps.Repositories
             }
         }
 
+        public Product UpdateSingleProduct(int productId, Product updatedProduct)
+        {
+            var sql = @"update Products
+                        set Title=@Title, [Description]=@[Description], Quantity=@Quantity, Price=@Price, imageUrl=@imageUrl
+                        where ProductId=@productId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<Product>(sql, updatedProduct);
+                return result;
+            }
+        }
+
         public IEnumerable<ProductWithBasicInfo> GetTop20NewestProducts()
         {
             var sql = @"Select TOP(20) ProductId, Title, Price, imageUrl, Description, DateAdded
