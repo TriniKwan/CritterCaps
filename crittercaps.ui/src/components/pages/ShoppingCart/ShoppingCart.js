@@ -37,13 +37,21 @@ class ShoppingCart extends React.Component {
       .catch((error) => console.error('error from shopping cart data', error));
   }
 
-  async componentDidMount() {
-    const uid = await authData.getUid();
-    await authData.getUserByUid(uid)
-      .then((userData) => {
-        this.getShoppingCartData(userData.id);
-      })
-      .catch((error) => console.error('error from getUser', error));
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if (sessionStorage.getItem('token')) {
+          const uid = authData.getUid();
+          authData.getUserByUid(uid)
+            .then((userData) => {
+              this.getShoppingCartData(userData.id);
+            })
+            .catch((error) => console.error('error from getUser', error));
+        }
+      } else {
+        this.setState({ cartData: [], lineItems: {} });
+      }
+    });
     // await fetch(this.getShoppingCartData(this.state.userId));
   }
 
