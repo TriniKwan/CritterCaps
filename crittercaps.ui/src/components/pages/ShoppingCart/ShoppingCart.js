@@ -1,6 +1,6 @@
 import React from 'react';
 import './ShoppingCart.scss';
-import firebase from 'firebase/app';
+import firebase, { auth } from 'firebase/app';
 import 'firebase/auth';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -9,25 +9,20 @@ import orderData from '../../../helpers/data/orderData';
 
 class ShoppingCart extends React.Component {
   state = {
-    userId: '',
+    // userId: '',
     cartData: [],
     lineItems: {},
   }
 
   // gets the userID from the database using the uid and uses it to get the shopping cart data
-  getUser = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        if (sessionStorage.getItem('token')) {
-          authData.getUserByUid(user.uid)
-            .then((userData) => {
-              this.setState({ userId: userData.id });
-            })
-            .catch((error) => console.error('error from getUser', error));
-        }
-      }
-    });
-  }
+  // getUser = () => {
+  //   const { uid } = this.props;
+  //   authData.getUserByUid(uid)
+  //     .then((userData) => {
+  //       this.setState({ userId: userData.id });
+  //     })
+  //     .catch((error) => console.error('error from getUser', error));
+  // }
 
   getShoppingCartData = (userId) => {
     orderData.getOpenOrder(userId)
@@ -43,12 +38,19 @@ class ShoppingCart extends React.Component {
   }
 
   async componentDidMount() {
-    await fetch(this.getUser());
-    await fetch(this.getShoppingCartData(this.state.userId));
+    const uid = await authData.getUid();
+    await authData.getUserByUid(uid)
+      .then((userData) => {
+        this.getShoppingCartData(userData.id);
+      })
+      .catch((error) => console.error('error from getUser', error));
+    // await fetch(this.getShoppingCartData(this.state.userId));
   }
 
   render() {
     const { cartData, lineItems } = this.state;
+
+    const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
       <div className="ShoppingCart">
@@ -61,6 +63,7 @@ class ShoppingCart extends React.Component {
             <ListGroup variant="flush">
             {/* {lineItems.map((item) => <ListGroup.Item id={item.productId}>{item.productTitle}</ListGroup.Item>)} */}
             </ListGroup>
+            <Card.Text>Total: {Total}</Card.Text>
             <Card.Link href="#">Card Link</Card.Link>
             <Card.Link href="#">Another Link</Card.Link>
           </Card.Body>

@@ -34,6 +34,7 @@ firebaseConnection();
 class App extends React.Component {
   state = {
     authed: false,
+    uid: '',
   }
 
   componentDidMount() {
@@ -41,9 +42,11 @@ class App extends React.Component {
       if (user) {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
+          this.setState({ uid: user.uid });
         }
       } else {
         this.setState({ authed: false });
+        this.setState({ uid: '' });
       }
     });
   }
@@ -64,7 +67,7 @@ class App extends React.Component {
             <Route path="/products" exact component={Products} authed={authed} />
             <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
-            <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
+            <Route path="/userProfile/shoppingCart" render={(props) => (<ShoppingCart {...props} authed={authed} uid={uid} />)} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
           </Switch>
         </Router>
