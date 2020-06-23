@@ -23,6 +23,10 @@ class EditProduct extends React.Component {
       .catch((error) => console.error(error, 'error from single product'));
   }
 
+  updateProduct = (e) => {
+    e.preventDefault();
+  }
+
   pictureChange = (e) => {
     e.preventDefault();
     this.setState({ imageUrl: e.target.value });
