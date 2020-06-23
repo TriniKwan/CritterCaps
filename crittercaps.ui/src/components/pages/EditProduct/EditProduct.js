@@ -6,6 +6,7 @@ import ProductData from '../../../helpers/data/ProductData';
 class EditProduct extends React.Component {
   state = {
     singleProduct: {},
+    productId: '',
     hatName: '',
     description: '',
     quantity: '',
@@ -15,6 +16,7 @@ class EditProduct extends React.Component {
 
   componentDidMount() {
     const { productId } = this.props.match.params;
+    this.setState({ productId });
     // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)
       .then((product) => this.setState({
@@ -23,8 +25,31 @@ class EditProduct extends React.Component {
       .catch((error) => console.error(error, 'error from single product'));
   }
 
-  updateProduct = (e) => {
+  updateProductEvent = (e) => {
+    const {
+      singleProduct,
+      hatName,
+      description,
+      quantity,
+      price,
+      imageUrl,
+      productId
+    } = this.state;
     e.preventDefault();
+    const newProduct = {
+      productId: productId,
+      title: hatName,
+      description: description,
+      quantity: quantity,
+      price: price,
+      imageUrl: imageUrl,
+      inStock: singleProduct.inStock,
+      category: singleProduct.category,
+      animalType: singleProduct.animalType,
+    };
+    ProductData.updateSingleProduct(productId, newProduct)
+      .then((result) => console.log(result))
+      .catch((error) => console.error('err from save profile', error));
   }
 
   pictureChange = (e) => {
@@ -50,10 +75,6 @@ class EditProduct extends React.Component {
   priceChange = (e) => {
     e.preventDefault();
     this.setState({ price: e.target.value });
-  }
-
-  updateProductEvent = (e) => {
-    e.preventDefault();
   }
 
   render() {
@@ -113,16 +134,40 @@ class EditProduct extends React.Component {
             onChange={this.quantityChange}
           />
         </div>
-        <label htmlFor="hat-price"><strong>Price</strong></label>
-          <input
-            input="text"
-            className="form-control"
-            id="hat-price"
-            placeholder="Enter price"
-            value={price}
-            onChange={this.priceChange}
-          />
+        <div>
+          <label htmlFor="hat-price"><strong>Price</strong></label>
+            <input
+              input="text"
+              className="form-control"
+              id="hat-price"
+              placeholder="Enter price"
+              value={price}
+              onChange={this.priceChange}
+            />
         </div>
+        {/* <div>
+          <label htmlFor="category"><strong>Category</strong></label>
+            <input
+              input="text"
+              className="form-control"
+              id="category"
+              placeholder="Enter Category"
+              value={singleProduct.category}
+              onChange={this.categoryChange}
+            />
+        </div>
+        <div>
+          <label htmlFor="stock-status"><strong>In Stock</strong></label>
+            <input
+              input="text"
+              className="form-control"
+              id="stock-status"
+              placeholder="Enter price"
+              value={singleProduct.inStock}
+              onChange={this.stockChange}
+            />
+        </div> */}
+      </div>
       <button className="btn btn-outline-dark updateButton" onClick={this.updateProductEvent}>Update</button>
     </form>
     );

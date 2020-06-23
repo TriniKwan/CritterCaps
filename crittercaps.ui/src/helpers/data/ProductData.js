@@ -33,4 +33,11 @@ const getSingleProduct = (productId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-export default { getNewestProducts, getAllAvailableProducts, getSingleProduct };
+const updateSingleProduct = (productId, newProductObj) => axios.put(`${baseUrl}/api/crittercaps/products/product/${productId}/edit`, newProductObj);
+
+export default {
+  getNewestProducts,
+  getAllAvailableProducts,
+  getSingleProduct,
+  updateSingleProduct,
+};

@@ -53,7 +53,7 @@ namespace CritterCaps.Repositories
             }
         }
 
-        public Product UpdateSingleProduct(int productId, Product updatedProduct)
+        public Product UpdateSingleProduct(Product updatedProduct)
         {
             var sql = @"update Products
                         set Title=@Title, [Description]=@[Description], Quantity=@Quantity, Price=@Price, imageUrl=@imageUrl
