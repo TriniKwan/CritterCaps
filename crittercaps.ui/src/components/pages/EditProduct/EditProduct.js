@@ -48,7 +48,7 @@ class EditProduct extends React.Component {
       animalType: singleProduct.animalType,
     };
     ProductData.updateSingleProduct(productId, newProduct)
-      .then((result) => console.log(result))
+      .then(() => this.props.history.push('/products'))
       .catch((error) => console.error('err from save profile', error));
   }
 
