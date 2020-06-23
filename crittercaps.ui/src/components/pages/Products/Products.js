@@ -1,9 +1,11 @@
 import React from 'react';
+import firebase from 'firebase';
 import './Products.scss';
 import SearchBox from '../../shared/SearchBox/SearchBox';
 import productTypesData from '../../../helpers/data/productTypesData';
 import ProductData from '../../../helpers/data/ProductData';
 import ProductCard from '../../shared/ProductCard/ProductCard';
+import authData from '../../../helpers/data/authData';
 
 class Products extends React.Component {
   // defining state for product
@@ -12,11 +14,13 @@ class Products extends React.Component {
     productTypes: [],
     originalProducts: [],
     products: [],
+    administrator: false,
   }
 
   componentDidMount() {
     this.getAllProductTypes();
     this.getAllAvailableProducts();
+    this.getUserAdminData();
   }
 
   getAllProductTypes = () => {
@@ -25,6 +29,21 @@ class Products extends React.Component {
         this.setState({ productTypes });
       })
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
+  }
+
+  getUserAdminData = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if (sessionStorage.getItem('token')) {
+          const userUid = authData.getUid();
+          authData.getUserByUid(userUid)
+            .then((userData) => this.setState({ administrator: userData.administrator }))
+            .catch((error) => console.error(error, 'error from get user Data'));
+        } else {
+          this.setState({ administrator: false });
+        }
+      }
+    });
   }
 
   // set state to products and originalProducts
@@ -72,6 +91,7 @@ class Products extends React.Component {
     const {
       productTypes,
       products,
+      administrator,
     } = this.state;
 
     return (
@@ -101,7 +121,7 @@ class Products extends React.Component {
           </div>
         </div>
         <div className="productCardSection">
-          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} />) };
+          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} administrator={administrator} />) };
         </div>
       </div>
     );
