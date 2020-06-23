@@ -1,3 +1,20 @@
 .ShoppingCart {
     margin: 100px;
+
+    #cart {
+        width: 35%;
+    }
+
+    .cartButtons {
+        margin-top: 20px;
+    }
+
+    .price {
+        margin-left: auto;
+        padding: 5px;
+    }
+
+    .fa-trash-alt {
+        color: white;
+    }
 }
