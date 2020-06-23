@@ -80,7 +80,7 @@ class ShoppingCart extends React.Component {
           }
             <ListGroup variant="flush">
               {lineItems.length > 0
-                ? lineItems.map((item) => <ListGroup.Item id={item.productId} key={item.productId}>
+                ? lineItems.map((item) => <ListGroup.Item id={item.productId} key={item.lineItemtId}>
                   <div className="row d-flex justify-content-between">
                     <div>{item.title}</div>
                     <div className="price">{Number(item.unitPrice).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
