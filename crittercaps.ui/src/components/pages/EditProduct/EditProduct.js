@@ -39,6 +39,7 @@ class EditProduct extends React.Component {
         category: product.category,
         animalType: product.animalType,
         singleProduct: product,
+        inStock: product.inStock,
         productTypeId: product.productTypeId,
         animalTypeId: product.animalTypeId,
       }))
@@ -63,7 +64,6 @@ class EditProduct extends React.Component {
 
   updateProductEvent = (e) => {
     e.preventDefault();
-    this.stockUpdate();
     const {
       hatName,
       description,
@@ -75,6 +75,7 @@ class EditProduct extends React.Component {
       productTypeId,
       animalTypeId,
     } = this.state;
+    this.stockUpdate();
     const newProduct = {
       productId,
       title: hatName,
@@ -112,6 +113,7 @@ class EditProduct extends React.Component {
   quantityChange = (e) => {
     e.preventDefault();
     this.setState({ quantity: e.target.value });
+    this.stockUpdate();
   }
 
   priceChange = (e) => {
