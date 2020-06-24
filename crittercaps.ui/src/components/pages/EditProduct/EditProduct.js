@@ -75,7 +75,6 @@ class EditProduct extends React.Component {
       productTypeId,
       animalTypeId,
     } = this.state;
-    this.stockUpdate();
     const newProduct = {
       productId,
       title: hatName,
