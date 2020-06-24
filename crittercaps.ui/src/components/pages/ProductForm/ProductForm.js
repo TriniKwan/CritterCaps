@@ -7,8 +7,6 @@ class ProductForm extends React.Component {
   state = {
     productTypes: [],
     animalTypes: [],
-    productTypeName: '',
-    animalTypeName: '',
     productId: 0,
     hatName: '',
     description: '',
@@ -126,8 +124,6 @@ class ProductForm extends React.Component {
       price,
       productTypeId,
       animalTypeId,
-      animalTypeName,
-      productTypeName,
     } = this.state;
 
     return (
@@ -194,7 +190,7 @@ class ProductForm extends React.Component {
                   type="select"
                   className="custom-select m-2"
                   id="category-name"
-                  value={productTypeName}
+                  value={productTypeId}
                   onChange={this.categoryChange}
                   >
                   <option>Choose One</option>
@@ -211,7 +207,7 @@ class ProductForm extends React.Component {
               input="text"
               className="form-control"
               id="animalType"
-              value={animalTypeName}
+              value={animalTypeId}
               onChange={this.animalTypeChange}
             >
               <option>Choose One</option>
