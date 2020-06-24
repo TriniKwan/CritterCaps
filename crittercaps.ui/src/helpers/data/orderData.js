@@ -18,7 +18,7 @@ const getOpenOrder = (userId) => new Promise((resolve) => {
 });
 
 const addItem = (orderId, productId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/orders/addItem/orderId/${orderId}/productId/${productId}`)
+  axios.post(`${baseUrl}/api/crittercaps/orders/addItem/orderId/${orderId}/productId/${productId}`)
     .then((result) => {
       const openOrder = result.data;
       resolve(openOrder);

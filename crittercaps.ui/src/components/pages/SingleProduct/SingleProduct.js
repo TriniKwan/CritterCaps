@@ -54,22 +54,14 @@ class SingleProduct extends React.Component {
   }
 
   checkExistingOrderAndCreateNew = () => {
-    const { userId } = this.state;
+    const { userId, orderId, cartExists } = this.state;
+    const { productId } = this.props.match.params;
     if (userId === '') {
       authData.loginUser();
     }
-
-    // orderData.getOpenOrder(userId)
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => console.error(error));
-    // if (order.StatusCode === 404) {
-    //   orderData.createNewOrder(userId)
-    //     .then((result) => console.log(result))
-    //     .catch((error) => console.error('err from check and create', error));
-    // }
-    // return order;
+    if (cartExists === true) {
+      orderData.addItem(orderId, productId);
+    }
   };
 
   componentDidMount() {
