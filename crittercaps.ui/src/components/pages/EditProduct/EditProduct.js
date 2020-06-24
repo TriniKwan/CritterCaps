@@ -3,10 +3,14 @@ import './EditProduct.scss';
 import { Link } from 'react-router-dom';
 import ProductData from '../../../helpers/data/ProductData';
 import productTypesData from '../../../helpers/data/productTypesData';
+import animalTypeData from '../../../helpers/data/animalTypeData';
 
 class EditProduct extends React.Component {
   state = {
     productTypes: {},
+    animalTypes: {},
+    productTypeName: '',
+    animalTypeName: '',
     productId: '',
     hatName: '',
     description: '',
@@ -21,23 +25,24 @@ class EditProduct extends React.Component {
   componentDidMount() {
     this.getSingleProduct();
     this.getAllProductTypes();
+    this.getAllAnimalTypes();
   }
 
   getSingleProduct = () => {
     const { productId } = this.props.match.params;
-    this.setState({ productId : parseInt(productId) });
+    // eslint-disable-next-line radix
+    this.setState({ productId: parseInt(productId) });
     // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)
-      .then((product) => 
-        this.setState({
-          hatName: product.title,
-          description: product.description,
-          quantity: product.quantity,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          category: product.category,
-          animalType: product.animalType,
-          singleProduct: product,
+      .then((product) => this.setState({
+        hatName: product.title,
+        description: product.description,
+        quantity: product.quantity,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        category: product.category,
+        animalType: product.animalType,
+        singleProduct: product,
       }))
       .catch((error) => console.error(error, 'error from edit product'));
   }
@@ -45,9 +50,17 @@ class EditProduct extends React.Component {
   getAllProductTypes = () => {
     productTypesData.getAllProductTypes()
       .then((productTypes) => {
-        this.setState({ productTypes });
+        this.setState({ productTypes, productTypeName: productTypes.category });
       })
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
+  }
+
+  getAllAnimalTypes = () => {
+    animalTypeData.getAllAnimalTypes()
+      .then((animalTypes) => {
+        this.setState({ animalTypes, animalTypeName: animalTypes.animalType });
+      })
+      .catch((errFromAllAnimalTypes) => console.error(errFromAllAnimalTypes));
   }
 
   updateProductEvent = (e) => {
@@ -65,15 +78,18 @@ class EditProduct extends React.Component {
       animalTypeId,
     } = this.state;
     const newProduct = {
-      productId: productId,
+      productId,
       title: hatName,
-      description: description,
+      description,
+      // eslint-disable-next-line radix
       quantity: parseInt(quantity),
       price: parseFloat(price),
-      imageUrl: imageUrl,
-      inStock: inStock,
-      productTypeId: productTypeId,
-      animalTypeId: animalTypeId,
+      imageUrl,
+      inStock,
+      // eslint-disable-next-line radix
+      productTypeId: parseInt(productTypeId),
+      // eslint-disable-next-line radix
+      animalTypeId: parseInt(animalTypeId),
     };
     ProductData.updateSingleProduct(productId, newProduct)
       .then(() => this.props.history.push('/products'))
@@ -124,6 +140,7 @@ class EditProduct extends React.Component {
   render() {
     const {
       productTypes,
+      animalTypes,
       hatName,
       description,
       quantity,
@@ -131,6 +148,8 @@ class EditProduct extends React.Component {
       price,
       productTypeId,
       animalTypeId,
+      animalTypeName,
+      productTypeName,
     } = this.state;
 
     return (
@@ -193,28 +212,38 @@ class EditProduct extends React.Component {
         </div>
         <div className="form-group row">
               <label htmlFor="category-name" className="col-form-label categoryDropdown">Category</label>
-                <select
+              <select
                   type="select"
                   className="custom-select m-2"
                   id="category-name"
-                  value={productTypeId}
+                  value={productTypeName}
                   onChange={this.categoryChange}
                   >
                   <option>Choose One</option>
-                  {productTypes.map((productType) => <option key={productType.productTypeId} value={productType.productTypeId} >{productType.category}</option>)}
+                  {
+                    productTypes.length > 0
+                      ? productTypes.map((productType) => <option key={productType.productTypeId} value={productType.productTypeId} >{productType.category}</option>)
+                      : ('')
+                  }
               </select>
-            </div>
-        {/* <div>
-          <label htmlFor="animalType-text"><strong>Animal Type</strong></label>
-            <input
+        </div>
+        <div className="form-group row">
+            <label htmlFor="animalType"><strong>Animal Type</strong></label>
+            <select
               input="text"
               className="form-control"
-              id="animalType-text"
-              placeholder="Enter animal type"
-              value={animalTypeId}
+              id="animalType"
+              value={animalTypeName}
               onChange={this.animalTypeChange}
-            />
-        </div> */}
+            >
+              <option>Choose One</option>
+                  {
+                    animalTypes.length > 0
+                      ? animalTypes.map((animalType) => <option key={animalType.animalId} value={animalType.animalId} >{animalType.animalType}</option>)
+                      : ('')
+                  }
+            </select>
+        </div>
       </div>
       <button className="btn btn-outline-dark updateButton" onClick={this.updateProductEvent}>Update</button>
     </form>
