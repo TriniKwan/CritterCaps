@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
+import { Link } from 'react-router-dom';
 import './Products.scss';
 import SearchBox from '../../shared/SearchBox/SearchBox';
 import productTypesData from '../../../helpers/data/productTypesData';
@@ -102,6 +103,11 @@ class Products extends React.Component {
             placeholder='search'
             handleSearchEvent={this.handleSearchEvent}
           />
+        </div>
+        <div>
+          {
+            administrator ? <Link className="btn btn-success" to="/products/new">Add New Item</Link> : ('')
+          }
         </div>
         <div className="dropdownSection">
           <div className="form-inline">

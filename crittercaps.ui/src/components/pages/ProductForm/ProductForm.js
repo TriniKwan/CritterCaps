@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ProductData from '../../../helpers/data/ProductData';
 import productTypesData from '../../../helpers/data/productTypesData';
 import animalTypeData from '../../../helpers/data/animalTypeData';
