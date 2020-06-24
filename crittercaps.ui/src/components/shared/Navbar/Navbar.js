@@ -38,7 +38,12 @@ class NavBar extends React.Component {
                 this.setState({ noProfile: false });
               }
             })
-            .catch((error) => console.error('err from check profile', error));
+            .catch((error) => {
+              if (error.StatusCode === 404) {
+                this.setState({ noProfile: true });
+                this.setState({ show: true });
+              }
+            });
         }
       });
     }

@@ -32,7 +32,7 @@ class ShoppingCart extends React.Component {
             .catch((error) => console.error('error from getUser', error));
         }
       } else {
-        this.setState({ cartData: [], lineItems: {} });
+        this.setState({ cartData: [], lineItems: {}, userId: '' });
       }
     });
   }
