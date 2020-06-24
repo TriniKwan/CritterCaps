@@ -55,7 +55,7 @@ namespace CritterCaps.Repositories
                             ON PaymentType.PaymentID = [Order].PaymentType
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, LineItem.LineItemtId, Products.ProductId, Products.Title, LineItem.UnitPrice
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -93,7 +93,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -292,7 +292,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                             WHERE PaymentType IS NULL";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -383,6 +383,43 @@ namespace CritterCaps.Repositories
                 db.QueryFirstOrDefault(sql, new { OrderId = orderId });
 
                 return ($"Successfully deleted order number {orderId}");
+            }
+        }
+
+        public OrderInProgressWithLineItems GetOpenOrderByUserId(int userId)
+        {
+            var orderSql = $@"SELECT [Order].OrderId, [User].FirstName + ' ' + [User].LastName AS CustomerName, [Order].InvoiceDate, [Order].Total
+                            FROM [ORDER]
+                            JOIN[User]
+                            ON[Order].UserId = [User].ID
+                            WHERE PaymentType IS NULL AND [Order].UserId = @userId";
+
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
+                            FROM [Order]
+	                            JOIN LineItem
+	                            ON [Order].OrderId = LineItem.OrderId
+	                            JOIN Products
+	                            ON LineItem.ProductId = Products.ProductId
+                            WHERE [Order].UserId = @UserId AND [Order].OrderId = @orderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var order = db.QueryFirstOrDefault<OrderInProgressWithLineItems>(orderSql, new { UserId = userId });
+                if (order != null)
+                {
+                    var orderId = order.OrderId;
+
+                    var lineItems = db.Query<LineItem>(lineItem, new { UserId = userId, OrderId = orderId });
+
+                    if (lineItems.Any())
+                    {
+                        order.LineItem = lineItems;
+                    }
+
+                    return order;
+                }
+
+                return order;
             }
         }
     }

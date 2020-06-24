@@ -1,10 +1,9 @@
 import React from 'react';
-import './SingleProduct.scss';
-import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
+import Card from 'react-bootstrap/Card';
 import ProductData from '../../../helpers/data/ProductData';
 
-class SingleProduct extends React.Component {
+class EditProduct extends React.Component {
   state = {
     product: {},
   }
@@ -39,8 +38,7 @@ class SingleProduct extends React.Component {
               <Card.Text>
                 Price: {price}
               </Card.Text>
-              <Link to="/" className="btn btn-info m-2">Back</Link>
-              <Link to={`/products/${product}`} className="btn btn-info m-2">Add To Cart</Link>
+              <Link to={`/products/${product}`} className="primary">Add To Cart</Link>
             </Card.Footer>
           </Card>
       </div>
@@ -49,4 +47,4 @@ class SingleProduct extends React.Component {
   }
 }
 
-export default SingleProduct;
+export default EditProduct;
