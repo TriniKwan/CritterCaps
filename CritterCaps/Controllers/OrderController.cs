@@ -58,7 +58,7 @@ namespace CritterCaps.Controllers
                 return Ok(result);
             }
 
-            return NotFound("Open order already exists");
+            return Ok("Open order already exists");
         }
 
         //Add items to an order
@@ -73,7 +73,7 @@ namespace CritterCaps.Controllers
                 return Ok(result);
             }
 
-            return NotFound("That order is already completed.");
+            return Ok("That order is already completed.");
         }
 
         //Complete order
@@ -88,7 +88,7 @@ namespace CritterCaps.Controllers
                 return Ok(result);
             }
 
-            return NotFound("That order is already completed.");
+            return Ok("That order is already completed.");
         }
 
         //Delete line item

@@ -55,7 +55,7 @@ namespace CritterCaps.Repositories
                             ON PaymentType.PaymentID = [Order].PaymentType
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, LineItem.LineItemtId, Products.ProductId, Products.Title, LineItem.UnitPrice
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -93,7 +93,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                         WHERE [Order].OrderId = @orderId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -292,7 +292,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                             WHERE PaymentType IS NULL";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -394,7 +394,7 @@ namespace CritterCaps.Repositories
                             ON[Order].UserId = [User].ID
                             WHERE PaymentType IS NULL AND [Order].UserId = @userId";
 
-            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice
+            var lineItem = $@"SELECT [Order].OrderId, Products.ProductId, Products.ProductId, Products.Title, LineItem.UnitPrice, LineItem.LineItemtId
                             FROM [Order]
 	                            JOIN LineItem
 	                            ON [Order].OrderId = LineItem.OrderId
@@ -405,13 +405,18 @@ namespace CritterCaps.Repositories
             using (var db = new SqlConnection(ConnectionString))
             {
                 var order = db.QueryFirstOrDefault<OrderInProgressWithLineItems>(orderSql, new { UserId = userId });
-                var orderId = order.OrderId;
-
-                var lineItems = db.Query<LineItem>(lineItem, new { UserId = userId, OrderId = orderId });
-
-                if (lineItems.Any())
+                if (order != null)
                 {
-                  order.LineItem = lineItems;
+                    var orderId = order.OrderId;
+
+                    var lineItems = db.Query<LineItem>(lineItem, new { UserId = userId, OrderId = orderId });
+
+                    if (lineItems.Any())
+                    {
+                        order.LineItem = lineItems;
+                    }
+
+                    return order;
                 }
 
                 return order;
