@@ -37,7 +37,7 @@ class ProductCard extends Component {
               </Card.Text>
               <div className="linkSection">
                 {
-                  administrator ? (<Link to={`/products/${productId}/edit`}>Edit</Link>) : ('')
+                  administrator ? (<Link to={`/products/product/${productId}/edit`}>Edit</Link>) : ('')
                 }
                 <Link to={`/products/${productId}`} className="primary">Buy Now</Link>
               </div>

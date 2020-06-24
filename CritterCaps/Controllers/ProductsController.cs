@@ -48,9 +48,9 @@ namespace CritterCaps.Controllers
 
         //Update single product
         [HttpPut("product/{productId}/edit")]
-        public IActionResult UpdateSingleProduct(Product updatedProduct)
+        public IActionResult UpdateSingleProduct(int productId, ProductDBInfo updatedProduct)
         {
-            var newProduct = _productRepository.UpdateSingleProduct(updatedProduct);
+            var newProduct = _productRepository.UpdateSingleProduct(productId, updatedProduct);
             return Ok(newProduct);
         }
 

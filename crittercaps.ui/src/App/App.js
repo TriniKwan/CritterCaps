@@ -71,6 +71,7 @@ class App extends React.Component {
 
   componentWillUnmount() {
     this.removeListener();
+    this.getUserData();
   }
 
   render() {
@@ -82,13 +83,14 @@ class App extends React.Component {
           <NavBar authed={authed} administrator={administrator} />
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
-            <Route path="/products" exact component={Products} authed={authed} />
-            <PrivateRoute path="/dashboard" exact component={Dashboard} authed={authed} ></PrivateRoute>
+            <Route path="/products" exact component={Products} authed={authed} administrator={administrator} />
+            <PrivateRoute path="/dashboard" exact component={Dashboard} authed={authed} administrator={administrator} ></PrivateRoute>
             <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
             <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
+            <PrivateRoute path="products/new" exact />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
-            <PrivateRoute path="/products/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
+            <PrivateRoute path="/products/product/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
           </Switch>
         </Router>
       </div>

@@ -53,15 +53,28 @@ namespace CritterCaps.Repositories
             }
         }
 
-        public Product UpdateSingleProduct(Product updatedProduct)
+        public ProductDBInfo UpdateSingleProduct(int productId, ProductDBInfo updatedProduct)
         {
             var sql = @"update Products
-                        set Title=@Title, [Description]=@[Description], Quantity=@Quantity, Price=@Price, imageUrl=@imageUrl
-                        where ProductId=@productId";
+                        set Title=@Title, [Description]=@Description, Quantity=@Quantity, Price=@Price, imageUrl=@imageUrl, InStock=@InStock, ProductTypeId=@ProductTypeId, AnimalTypeId=@AnimalTypeId
+                        where ProductId=@ProductId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var result = db.QueryFirstOrDefault<Product>(sql, updatedProduct);
+                var parameters = new
+                {
+                    Title = updatedProduct.Title,
+                    Description = updatedProduct.Description,
+                    Quantity = updatedProduct.Quantity,
+                    Price = updatedProduct.Price,
+                    ImageUrl = updatedProduct.ImageUrl,
+                    InStock = updatedProduct.InStock,
+                    ProductTypeId = updatedProduct.ProductTypeId,
+                    AnimalTypeId = updatedProduct.AnimalTypeId,
+                    ProductId = productId
+                };
+
+                var result = db.QueryFirstOrDefault<ProductDBInfo>(sql, parameters);
                 return result;
             }
         }

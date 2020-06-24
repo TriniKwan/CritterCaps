@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
@@ -7,6 +8,10 @@ import authData from '../../../helpers/data/authData';
 class Dashboard extends React.Component {
   state = {
     userData: {},
+  }
+
+  static propTypes = {
+    administrator: PropTypes.bool,
   }
 
   getUserData = () => {
@@ -30,6 +35,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { userData } = this.state;
+    const { administrator } = this.props;
 
     return (
       <div className="UserProfile">
@@ -49,6 +55,11 @@ class Dashboard extends React.Component {
             <Card.Footer className="mb-0">
               <Link to="/userProfile/orders" className="btn btn-primary">Orders</Link>
               <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
+              {
+                administrator
+                  ? (<Link className="btn btn-success" to="/dashboard">Add New Item</Link>)
+                  : ('')
+              }
             </Card.Footer>
           </Card>
         </div>
