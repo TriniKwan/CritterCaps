@@ -24,8 +24,10 @@ class ShoppingCart extends React.Component {
           const uid = authData.getUid();
           authData.getUserByUid(uid)
             .then((userData) => {
-              this.setState({ userId: userData.id });
-              this.getShoppingCartData(this.state.userId);
+              if (userData) {
+                this.setState({ userId: userData.id });
+                this.getShoppingCartData(this.state.userId);
+              }
             })
             .catch((error) => console.error('error from getUser', error));
         }
@@ -46,13 +48,15 @@ class ShoppingCart extends React.Component {
           this.setState({ cartData: cartWithDate });
           this.setState({ lineItems: cart.lineItem });
           this.setState({ cartExists: true });
-        } else {
+        }
+      })
+      .catch((error) => {
+        if (error.StatusCode === 404) {
           this.setState({ cartExists: false });
           this.setState({ cartData: [] });
           this.setState({ lineItems: [] });
         }
-      })
-      .catch((error) => console.error('error from shopping cart data', error));
+      });
   }
 
   componentDidMount() {
