@@ -39,7 +39,8 @@ class SingleProduct extends React.Component {
               <Card.Text>
                 Price: {price}
               </Card.Text>
-              <Link to={`/products/${product}`} className="primary">Add To Cart</Link>
+              <Link to="/" className="btn btn-info m-2">Back</Link>
+              <Link to={`/products/${product}`} className="btn btn-info m-2">Add To Cart</Link>
             </Card.Footer>
           </Card>
       </div>

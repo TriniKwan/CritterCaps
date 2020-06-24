@@ -39,6 +39,7 @@ class App extends React.Component {
   state = {
     authed: false,
     administrator: false,
+    uid: '',
   }
 
   componentDidMount() {
@@ -46,9 +47,11 @@ class App extends React.Component {
       if (user) {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
+          this.setState({ uid: user.uid });
         }
       } else {
         this.setState({ authed: false });
+        this.setState({ uid: '' });
       }
     });
     this.getUserData();
@@ -75,7 +78,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { authed, administrator } = this.state;
+    const { authed, administrator, uid } = this.state;
 
     return (
       <div className="App">
@@ -87,7 +90,7 @@ class App extends React.Component {
             <PrivateRoute path="/dashboard" exact component={Dashboard} authed={authed} administrator={administrator} ></PrivateRoute>
             <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
-            <Route path="/userProfile/shoppingCart" exact component={ShoppingCart} authed={authed} />
+            <Route path="/userProfile/shoppingCart" render={(props) => (<ShoppingCart {...props} authed={authed} uid={uid} />)} />
             <PrivateRoute path="products/new" exact />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
             <PrivateRoute path="/products/product/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
