@@ -10,10 +10,6 @@ class Dashboard extends React.Component {
     userData: {},
   }
 
-  static propTypes = {
-    administrator: PropTypes.bool,
-  }
-
   getUserData = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -35,7 +31,6 @@ class Dashboard extends React.Component {
 
   render() {
     const { userData } = this.state;
-    const { administrator } = this.props;
 
     return (
       <div className="UserProfile">
@@ -55,11 +50,7 @@ class Dashboard extends React.Component {
             <Card.Footer className="mb-0">
               <Link to="/userProfile/orders" className="btn btn-primary">Orders</Link>
               <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
-              {
-                administrator
-                  ? (<Link className="btn btn-success" to="/dashboard">Add New Item</Link>)
-                  : ('')
-              }
+              <Link className="btn btn-success" to="/products/new">Add New Item</Link>
             </Card.Footer>
           </Card>
         </div>

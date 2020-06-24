@@ -53,6 +53,19 @@ namespace CritterCaps.Repositories
             }
         }
 
+        public ProductDBInfo AddProduct(ProductDBInfo productToAdd)
+        {
+            var sql = @$"insert into Products(ProductTypeId, AnimalTypeId, Title, [Description], Quantity, Price, imageUrl, inStock, DateAdded)
+                        OUTPUT INSERTED.*
+                        values (@ProductTypeId, @AnimalTypeId, @Title, @Description, @Quantity, @Price, @imageUrl, @InStock, '{DateTime.Now.ToShortDateString()}')";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<ProductDBInfo>(sql, productToAdd);
+                return result;
+            }
+        }
+
         public ProductDBInfo UpdateSingleProduct(int productId, ProductDBInfo updatedProduct)
         {
             var sql = @"update Products

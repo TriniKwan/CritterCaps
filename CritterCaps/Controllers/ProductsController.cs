@@ -54,6 +54,14 @@ namespace CritterCaps.Controllers
             return Ok(newProduct);
         }
 
+        //Add product
+        [HttpPost()]
+        public IActionResult AddProduct(ProductDBInfo productToAdd)
+        {
+            var result = _productRepository.AddProduct(productToAdd);
+            return Ok(result);
+        }
+
 
         //Get top20 newest products
         [HttpGet("newest")]
