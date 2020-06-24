@@ -6,10 +6,8 @@ import animalTypeData from '../../../helpers/data/animalTypeData';
 
 class EditProduct extends React.Component {
   state = {
-    productTypes: {},
-    animalTypes: {},
-    productTypeName: '',
-    animalTypeName: '',
+    productTypes: [],
+    animalTypes: [],
     productId: '',
     hatName: '',
     description: '',
@@ -31,7 +29,6 @@ class EditProduct extends React.Component {
     const { productId } = this.props.match.params;
     // eslint-disable-next-line radix
     this.setState({ productId: parseInt(productId) });
-    // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)
       .then((product) => this.setState({
         hatName: product.title,
@@ -49,7 +46,7 @@ class EditProduct extends React.Component {
   getAllProductTypes = () => {
     productTypesData.getAllProductTypes()
       .then((productTypes) => {
-        this.setState({ productTypes, productTypeName: productTypes.category });
+        this.setState({ productTypes });
       })
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
@@ -57,7 +54,7 @@ class EditProduct extends React.Component {
   getAllAnimalTypes = () => {
     animalTypeData.getAllAnimalTypes()
       .then((animalTypes) => {
-        this.setState({ animalTypes, animalTypeName: animalTypes.animalType });
+        this.setState({ animalTypes });
       })
       .catch((errFromAllAnimalTypes) => console.error(errFromAllAnimalTypes));
   }
@@ -147,8 +144,6 @@ class EditProduct extends React.Component {
       price,
       productTypeId,
       animalTypeId,
-      animalTypeName,
-      productTypeName,
     } = this.state;
 
     return (
@@ -215,7 +210,7 @@ class EditProduct extends React.Component {
                   type="select"
                   className="custom-select m-2"
                   id="category-name"
-                  value={productTypeName}
+                  value={productTypes.productTypeId}
                   onChange={this.categoryChange}
                   >
                   <option>Choose One</option>
@@ -232,7 +227,7 @@ class EditProduct extends React.Component {
               input="text"
               className="form-control"
               id="animalType"
-              value={animalTypeName}
+              value={animalTypes.animalId}
               onChange={this.animalTypeChange}
             >
               <option>Choose One</option>

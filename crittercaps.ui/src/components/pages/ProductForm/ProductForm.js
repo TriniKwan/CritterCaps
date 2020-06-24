@@ -5,8 +5,8 @@ import animalTypeData from '../../../helpers/data/animalTypeData';
 
 class ProductForm extends React.Component {
   state = {
-    productTypes: {},
-    animalTypes: {},
+    productTypes: [],
+    animalTypes: [],
     productTypeName: '',
     animalTypeName: '',
     productId: 0,
