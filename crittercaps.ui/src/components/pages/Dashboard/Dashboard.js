@@ -51,6 +51,22 @@ class Dashboard extends React.Component {
               <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
             </Card.Footer>
           </Card>
+          <Card style={{ width: '30rem' }} className="h-100" border="primary">
+
+            <Card.Title>Sales Stats:</Card.Title>
+            <Card.Body>
+              Total Sales this Month: {userData.accountDate}
+              <Card.Text>
+                Average per Item: {userData.firstName} {userData.lastName}
+              </Card.Text>
+              <Card.Text>
+                Total Inventory by Category: {userData.email}
+              </Card.Text>
+              <Card.Text>
+                Orders that Require Shipping: {userData.email}
+              </Card.Text>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     );
