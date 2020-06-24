@@ -39,6 +39,8 @@ class EditProduct extends React.Component {
         category: product.category,
         animalType: product.animalType,
         singleProduct: product,
+        productTypeId: product.productTypeId,
+        animalTypeId: product.animalTypeId,
       }))
       .catch((error) => console.error(error, 'error from edit product'));
   }
@@ -143,7 +145,7 @@ class EditProduct extends React.Component {
       imageUrl,
       price,
       productTypeId,
-      animalId,
+      animalTypeId,
     } = this.state;
 
     return (
@@ -210,7 +212,7 @@ class EditProduct extends React.Component {
                   type="select"
                   className="custom-select m-2"
                   id="category-name"
-                  value={productTypes.productTypeId}
+                  value={productTypeId}
                   onChange={this.categoryChange}
                   >
                   <option>Choose One</option>
@@ -227,7 +229,7 @@ class EditProduct extends React.Component {
               input="text"
               className="form-control"
               id="animalType"
-              value={animalTypes.animalId}
+              value={animalTypeId}
               onChange={this.animalTypeChange}
             >
               <option>Choose One</option>

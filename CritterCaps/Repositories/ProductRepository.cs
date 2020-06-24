@@ -37,7 +37,7 @@ namespace CritterCaps.Repositories
 
         public Product GetSingleProduct(int productId)
         {
-            var sql = @"SELECT ProductId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
+            var sql = @"SELECT ProductId, Products.ProductTypeId, Products.AnimalTypeId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
                         FROM Products
 	                        JOIN ProductType
 	                        ON ProductType.ProductTypeId = Products.ProductTypeId
