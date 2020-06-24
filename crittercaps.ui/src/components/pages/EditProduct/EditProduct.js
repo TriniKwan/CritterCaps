@@ -143,7 +143,7 @@ class EditProduct extends React.Component {
       imageUrl,
       price,
       productTypeId,
-      animalTypeId,
+      animalId,
     } = this.state;
 
     return (
