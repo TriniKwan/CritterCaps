@@ -14,6 +14,7 @@ class ShoppingCart extends React.Component {
     cartData: [],
     lineItems: {},
     cartExists: false,
+    productName: '',
   }
 
   // gets the userID from the database using the uid and uses it to get the shopping cart data
@@ -61,16 +62,26 @@ class ShoppingCart extends React.Component {
 
   componentDidMount() {
     this.getUser();
+
+    if (this.props.location.state) {
+      this.setState({ addedToCart: true });
+      this.setState({ productName: this.props.location.state.productName });
+    } else { this.setState({ addedToCart: false }); }
   }
 
   render() {
-    const { cartData, lineItems, cartExists } = this.state;
+    const {
+      cartData, lineItems, cartExists, addedToCart, productName,
+    } = this.state;
 
     const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
       <div className="ShoppingCart">
         <h1>Shopping Cart</h1>
+        {addedToCart
+          ? (<h4 className="addedToCart">You added {productName} to your shopping cart!</h4>)
+          : ('')}
         <div className="d-flex justify-content-center">
         <Card id="cart">
           <Card.Body>

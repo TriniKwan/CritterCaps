@@ -1,8 +1,8 @@
 import React from 'react';
 import './SingleProduct.scss';
 import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
+import { Link, Redirect } from 'react-router-dom';
 import firebase from 'firebase/app';
 import ProductData from '../../../helpers/data/ProductData';
 import orderData from '../../../helpers/data/orderData';
@@ -15,6 +15,7 @@ class SingleProduct extends React.Component {
     userId: '',
     orderId: '',
     cartExists: false,
+    // redirect: null,
   }
 
   getUser = () => {
@@ -41,7 +42,6 @@ class SingleProduct extends React.Component {
     orderData.getOpenOrder(userId)
       .then((cart) => {
         if (cart !== 'No order exists') {
-          console.error(cart);
           this.setState({ cartExists: true });
           this.setState({ orderId: cart.orderId });
         }
@@ -61,6 +61,13 @@ class SingleProduct extends React.Component {
     }
     if (cartExists === true) {
       orderData.addItem(orderId, productId);
+      // this.setState({ redirect: '/userProfile/shoppingCart' });
+      this.props.history.push({
+        pathname: '/userProfile/shoppingCart',
+        state: {
+          productName: this.state.product.title,
+        },
+      });
     }
   };
 
@@ -76,6 +83,11 @@ class SingleProduct extends React.Component {
   render() {
     const { product } = this.state;
     const price = Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    // const currentProduct = this.props.history.location.pathname;
+
+    // if (this.state.redirect) {
+    //   return <Redirect from={currentProduct} to={this.state.redirect} />;
+    // }
 
     return (
       <div className="SingleProductCard m-2">
@@ -96,7 +108,7 @@ class SingleProduct extends React.Component {
                 Price: {price}
               </Card.Text>
               <Link to="/" className="btn btn-info m-2">Back</Link>
-              <Button onClick={this.checkExistingOrderAndCreateNew} className="btn btn-info m-2">Add To Cart</Button>
+              <Button onClick={this.checkExistingOrderAndCreateNew} className="btn btn-info m-2" >Add To Cart</Button>
             </Card.Footer>
           </Card>
       </div>
