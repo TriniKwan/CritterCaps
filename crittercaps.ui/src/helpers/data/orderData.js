@@ -12,4 +12,6 @@ const getOpenOrder = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+// const deleteLineItem = (lineItemtId) => axios.delete(`${baseUrl}/Order/deleteItem/&{lineItemtId}.json`); (don't forget to export the function)
+
 export default { getOpenOrder };

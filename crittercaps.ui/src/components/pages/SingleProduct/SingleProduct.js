@@ -10,6 +10,7 @@ class SingleProduct extends React.Component {
   }
 
   componentDidMount() {
+    // console.log('I was triggered during componentDidMount');
     const { productId } = this.props.match.params;
     // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)

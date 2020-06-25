@@ -7,6 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import authData from '../../../helpers/data/authData';
 import orderData from '../../../helpers/data/orderData';
+// import PropTypes from 'prop-types';
 
 class ShoppingCart extends React.Component {
   state = {
@@ -63,6 +64,21 @@ class ShoppingCart extends React.Component {
     this.getUser();
   }
 
+  // // TODO: delete line item event included here
+  // deleteItemEvent = (e) => {
+  //   e.preventDefault();
+  //   // delete line item;
+  //   const { product, deleteLine } = this.props;
+  //   deleteLine(product.lineItemId);
+  // }
+
+  //  // TODO: delete item function
+  //  deleteLine = (lineItemId) => {
+  //   orderData.deleteLineItem(lineItemId)
+  //     .then(() => this.setCurrentOrder())
+  //     .catch((err) => console.error('err from deleteline', err));
+  // }
+
   render() {
     const { cartData, lineItems, cartExists } = this.state;
 
@@ -98,6 +114,7 @@ class ShoppingCart extends React.Component {
                 : ('')
               }
             <div className="d-flex justify-content-around cartButtons">
+            {/* <a href="#" className="card-link btn btn-dark btn-sm" onClick={this.deleteItemEvent}>Remove From Cart</a> */}
               <Button variant="outline-info" href="/products">Continue Shopping</Button>
               <Button variant="info">Check Out</Button>
             </div>
