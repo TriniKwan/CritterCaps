@@ -199,11 +199,11 @@ class EditProduct extends React.Component {
               onChange={this.priceChange}
             />
         </div>
-        <div className="form-group row">
-              <label htmlFor="category-name" className="col-form-label categoryDropdown">Category</label>
+        <div className="form-group">
+              <label htmlFor="category-name"><strong>Category</strong></label>
               <select
-                  type="select"
-                  className="custom-select m-2"
+                  input="text"
+                  className="form-control"
                   id="category-name"
                   value={productTypeId}
                   onChange={this.categoryChange}
@@ -216,7 +216,7 @@ class EditProduct extends React.Component {
                   }
               </select>
         </div>
-        <div className="form-group row">
+        <div className="form-group">
             <label htmlFor="animalType"><strong>Animal Type</strong></label>
             <select
               input="text"

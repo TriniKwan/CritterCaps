@@ -49,33 +49,21 @@ class App extends React.Component {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
           this.setState({ uid: user.uid });
-        }
-      } else {
-        this.setState({ authed: false });
-        this.setState({ uid: '' });
-      }
-    });
-    this.getUserData();
-  }
-
-  getUserData = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        if (sessionStorage.getItem('token')) {
           const userUid = authData.getUid();
           authData.getUserByUid(userUid)
             .then((userData) => this.setState({ administrator: userData.administrator }))
             .catch((error) => console.error(error, 'error from get user Data'));
-        } else {
-          this.setState({ administrator: false });
         }
+      } else {
+        this.setState({ authed: false });
+        this.setState({ uid: '' });
+        this.setState({ administrator: false });
       }
     });
   }
 
   componentWillUnmount() {
     this.removeListener();
-    this.getUserData();
   }
 
   render() {

@@ -68,7 +68,7 @@ class Products extends React.Component {
     e.preventDefault();
     const productTypeId = e.target.value;
     if (productTypeId === 'all') {
-      this.getAllAvailableProducts();
+      this.getAllProducts();
     } else {
       this.getSingleProductTypeWithProducts(productTypeId);
     }
@@ -98,15 +98,13 @@ class Products extends React.Component {
     return (
       <div className="ProductsPage">
         <h1>Products</h1>
-        <div className="searchSection">
+        <div className="searchSection addSection">
           <SearchBox
             placeholder='search'
             handleSearchEvent={this.handleSearchEvent}
           />
-        </div>
-        <div>
           {
-            administrator ? <Link className="btn btn-success" to="/products/new">Add New Item</Link> : ('')
+            administrator ? <Link className="btn btn-outline-success" to="/products/new">Add New Item</Link> : ('')
           }
         </div>
         <div className="dropdownSection">
@@ -127,7 +125,7 @@ class Products extends React.Component {
           </div>
         </div>
         <div className="productCardSection">
-          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} administrator={administrator} />) };
+          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} administrator={administrator} />) }
         </div>
       </div>
     );
