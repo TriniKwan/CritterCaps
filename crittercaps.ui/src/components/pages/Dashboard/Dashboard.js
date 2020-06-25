@@ -3,10 +3,12 @@ import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
+import orderData from '../../../helpers/data/orderData';
 
 class Dashboard extends React.Component {
   state = {
     userData: {},
+    orderInfo: [],
   }
 
   getUserData = () => {
@@ -24,12 +26,39 @@ class Dashboard extends React.Component {
     });
   }
 
+  getOrderData = () => {
+    if (sessionStorage.getItem('token')) {
+      orderData.getAllOrders()
+        .then((orderInfo) => this.setState({ orderInfo }))
+        .catch((error) => console.error(error, 'error from get all orders'));
+    }
+  }
+
+  // getOrderData = () => {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       if (sessionStorage.getItem('token')) {
+  //         const userUid = authData.getUid();
+  //         authData.getUserByUid(userUid)
+  //           .then((userData) => this.setState({ userData }))
+  //           .catch((error) => console.error(error, 'error from get user Data'));
+  //         orderData.getAllOrders()
+  //           .then((orderInfo) => this.setState({ orderInfo }))
+  //           .catch((error) => console.error(error, 'error from get all orders'));
+  //       } else {
+  //         this.setState({ userData: {} });
+  //       }
+  //     }
+  //   });
+  // }
+
   componentDidMount() {
     this.getUserData();
+    this.getOrderData();
   }
 
   render() {
-    const { userData } = this.state;
+    const { userData, orderInfo } = this.state;
 
     return (
       <div className="UserProfile">
@@ -55,15 +84,15 @@ class Dashboard extends React.Component {
 
             <Card.Title>Sales Stats:</Card.Title>
             <Card.Body>
-              Total Sales this Month: {userData.accountDate}
+              Total Sales this Month: {orderInfo.orderId}
               <Card.Text>
-                Average per Item: {userData.firstName} {userData.lastName}
+                Average per Item:
               </Card.Text>
               <Card.Text>
-                Total Inventory by Category: {userData.email}
+                Total Inventory by Category:
               </Card.Text>
               <Card.Text>
-                Orders that Require Shipping: {userData.email}
+                Orders that Require Shipping:
               </Card.Text>
             </Card.Body>
           </Card>

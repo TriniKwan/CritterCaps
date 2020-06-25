@@ -12,4 +12,13 @@ const getOpenOrder = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-export default { getOpenOrder };
+const getAllOrders = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/orders`)
+    .then((result) => {
+      const allOrders = result.data;
+      resolve(allOrders);
+    })
+    .catch((error) => reject(error));
+});
+
+export default { getOpenOrder, getAllOrders };
