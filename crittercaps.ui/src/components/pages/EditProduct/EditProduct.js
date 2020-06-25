@@ -110,9 +110,7 @@ class EditProduct extends React.Component {
   }
 
   quantityChange = (e) => {
-    e.preventDefault();
     this.setState({ quantity: e.target.value });
-    this.stockUpdate();
   }
 
   priceChange = (e) => {
@@ -123,12 +121,6 @@ class EditProduct extends React.Component {
   categoryChange = (e) => {
     e.preventDefault();
     this.setState({ productTypeId: e.target.value });
-  }
-
-  stockUpdate = () => {
-    if (this.state.quantity === 0) {
-      this.setState({ inStock: false });
-    }
   }
 
   animalTypeChange = (e) => {

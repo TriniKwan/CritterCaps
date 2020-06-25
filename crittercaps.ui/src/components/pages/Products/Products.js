@@ -20,7 +20,7 @@ class Products extends React.Component {
 
   componentDidMount() {
     this.getAllProductTypes();
-    this.getAllAvailableProducts();
+    this.getAllProducts();
     this.getUserAdminData();
   }
 
@@ -50,8 +50,8 @@ class Products extends React.Component {
   // set state to products and originalProducts
   // products array will be manipulated by search bar and ultimately what will be printed on page
   // originalProducts will be untouched so it can be used to reset the state of products
-  getAllAvailableProducts = () => {
-    ProductData.getAllAvailableProducts()
+  getAllProducts = () => {
+    ProductData.getAllProducts()
       .then((products) => this.setState({ products, originalProducts: products }))
       .catch((error) => console.error(error, 'error from allProducts'));
   }
