@@ -8,7 +8,8 @@ import orderData from '../../../helpers/data/orderData';
 class Dashboard extends React.Component {
   state = {
     userData: {},
-    orderInfo: [],
+    adminTotalSales: 0,
+    userId: 0,
   }
 
   getUserData = () => {
@@ -17,7 +18,10 @@ class Dashboard extends React.Component {
         if (sessionStorage.getItem('token')) {
           const userUid = authData.getUid();
           authData.getUserByUid(userUid)
-            .then((userData) => this.setState({ userData }))
+            .then((userData) => {
+              this.setState({ userData, userId: userData.id });
+              this.getSingleAdminSales();
+            })
             .catch((error) => console.error(error, 'error from get user Data'));
         } else {
           this.setState({ userData: {} });
@@ -26,39 +30,19 @@ class Dashboard extends React.Component {
     });
   }
 
-  getOrderData = () => {
-    if (sessionStorage.getItem('token')) {
-      orderData.getAllOrders()
-        .then((orderInfo) => this.setState({ orderInfo }))
-        .catch((error) => console.error(error, 'error from get all orders'));
-    }
+  getSingleAdminSales = () => {
+    console.log(this.state.userId, 'not working');
+    orderData.getIndividualSales(this.state.userId)
+      .then((adminTotalSales) => this.setState({ adminTotalSales: adminTotalSales.total }))
+      .catch((error) => console.error(error, 'error from get get individual sales'));
   }
-
-  // getOrderData = () => {
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       if (sessionStorage.getItem('token')) {
-  //         const userUid = authData.getUid();
-  //         authData.getUserByUid(userUid)
-  //           .then((userData) => this.setState({ userData }))
-  //           .catch((error) => console.error(error, 'error from get user Data'));
-  //         orderData.getAllOrders()
-  //           .then((orderInfo) => this.setState({ orderInfo }))
-  //           .catch((error) => console.error(error, 'error from get all orders'));
-  //       } else {
-  //         this.setState({ userData: {} });
-  //       }
-  //     }
-  //   });
-  // }
 
   componentDidMount() {
     this.getUserData();
-    this.getOrderData();
   }
 
   render() {
-    const { userData, orderInfo } = this.state;
+    const { userData, adminTotalSales } = this.state;
 
     return (
       <div className="UserProfile">
@@ -85,7 +69,7 @@ class Dashboard extends React.Component {
 
             <Card.Title>Sales Stats:</Card.Title>
             <Card.Body>
-              Total Sales this Month: {orderInfo.orderId}
+              Total Sales this Month: {adminTotalSales}
               <Card.Text>
                 Average per Item:
               </Card.Text>
