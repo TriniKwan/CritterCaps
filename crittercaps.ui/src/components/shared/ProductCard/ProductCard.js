@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './ProductCard.scss';
 import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
-// import Button from 'react-bootstrap/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 class ProductCard extends Component {
@@ -37,9 +38,9 @@ class ProductCard extends Component {
               </Card.Text>
               <div className="linkSection">
                 {
-                  administrator ? (<Link to={`/products/${productId}/edit`}>Edit</Link>) : ('')
+                  administrator ? (<Link to={`/products/product/${productId}/edit`}><FontAwesomeIcon icon={faPen} /></Link>) : ('')
                 }
-                <Link to={`/products/${productId}`} className="primary">Buy Now</Link>
+                <Link to={`/products/${productId}`} className="primary">View</Link>
               </div>
             </Card.Footer>
           </Card>

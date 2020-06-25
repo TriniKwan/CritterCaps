@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CritterCaps.Models;
 using CritterCaps.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,23 @@ namespace CritterCaps.Controllers
 
             return Ok(result);
         }
+
+        //Update single product
+        [HttpPut("product/{productId}/edit")]
+        public IActionResult UpdateSingleProduct(int productId, ProductDBInfo updatedProduct)
+        {
+            var newProduct = _productRepository.UpdateSingleProduct(productId, updatedProduct);
+            return Ok(newProduct);
+        }
+
+        //Add product
+        [HttpPost()]
+        public IActionResult AddProduct(ProductDBInfo productToAdd)
+        {
+            var result = _productRepository.AddProduct(productToAdd);
+            return Ok(result);
+        }
+
 
         //Get top20 newest products
         [HttpGet("newest")]

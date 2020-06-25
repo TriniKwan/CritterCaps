@@ -1,14 +1,13 @@
 import React from 'react';
-import './EditProduct.scss';
 import ProductData from '../../../helpers/data/ProductData';
 import productTypesData from '../../../helpers/data/productTypesData';
 import animalTypeData from '../../../helpers/data/animalTypeData';
 
-class EditProduct extends React.Component {
+class ProductForm extends React.Component {
   state = {
     productTypes: [],
     animalTypes: [],
-    productId: '',
+    productId: 0,
     hatName: '',
     description: '',
     quantity: 0,
@@ -20,36 +19,14 @@ class EditProduct extends React.Component {
   }
 
   componentDidMount() {
-    this.getSingleProduct();
     this.getAllProductTypes();
     this.getAllAnimalTypes();
-  }
-
-  getSingleProduct = () => {
-    const { productId } = this.props.match.params;
-    // eslint-disable-next-line radix
-    this.setState({ productId: parseInt(productId) });
-    ProductData.getSingleProduct(productId)
-      .then((product) => this.setState({
-        hatName: product.title,
-        description: product.description,
-        quantity: product.quantity,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        category: product.category,
-        animalType: product.animalType,
-        singleProduct: product,
-        inStock: product.inStock,
-        productTypeId: product.productTypeId,
-        animalTypeId: product.animalTypeId,
-      }))
-      .catch((error) => console.error(error, 'error from edit product'));
   }
 
   getAllProductTypes = () => {
     productTypesData.getAllProductTypes()
       .then((productTypes) => {
-        this.setState({ productTypes });
+        this.setState({ productTypes, productTypeName: productTypes.category });
       })
       .catch((errFromAllProductTypes) => console.error(errFromAllProductTypes));
   }
@@ -57,13 +34,14 @@ class EditProduct extends React.Component {
   getAllAnimalTypes = () => {
     animalTypeData.getAllAnimalTypes()
       .then((animalTypes) => {
-        this.setState({ animalTypes });
+        this.setState({ animalTypes, animalTypeName: animalTypes.animalType });
       })
       .catch((errFromAllAnimalTypes) => console.error(errFromAllAnimalTypes));
   }
 
-  updateProductEvent = (e) => {
+  addProductEvent = (e) => {
     e.preventDefault();
+    this.stockUpdate();
     const {
       hatName,
       description,
@@ -89,7 +67,7 @@ class EditProduct extends React.Component {
       // eslint-disable-next-line radix
       animalTypeId: parseInt(animalTypeId),
     };
-    ProductData.updateSingleProduct(productId, newProduct)
+    ProductData.addProduct(newProduct)
       .then(() => this.props.history.push('/products'))
       .catch((error) => console.error('err', error));
   }
@@ -110,6 +88,7 @@ class EditProduct extends React.Component {
   }
 
   quantityChange = (e) => {
+    e.preventDefault();
     this.setState({ quantity: e.target.value });
   }
 
@@ -121,6 +100,12 @@ class EditProduct extends React.Component {
   categoryChange = (e) => {
     e.preventDefault();
     this.setState({ productTypeId: e.target.value });
+  }
+
+  stockUpdate = () => {
+    if (this.state.quantity === 0) {
+      this.setState({ inStock: false });
+    }
   }
 
   animalTypeChange = (e) => {
@@ -234,10 +219,10 @@ class EditProduct extends React.Component {
             </select>
         </div>
       </div>
-      <button className="btn btn-outline-dark updateButton" onClick={this.updateProductEvent}>Update</button>
+      <button className="btn btn-outline-dark saveButton" onClick={this.addProductEvent}>Save</button>
     </form>
     );
   }
 }
 
-export default EditProduct;
+export default ProductForm;
