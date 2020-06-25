@@ -78,6 +78,7 @@ class Dashboard extends React.Component {
             <Card.Footer className="mb-0">
               <Link to="/userProfile/orders" className="btn btn-primary">Orders</Link>
               <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
+              <Link className="btn btn-success" to="/products/new">Add New Item</Link>
             </Card.Footer>
           </Card>
           <Card style={{ width: '30rem' }} className="h-100" border="primary">

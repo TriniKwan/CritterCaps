@@ -23,6 +23,16 @@ const getAllAvailableProducts = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getAllProducts = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/products`)
+    .then((result) => {
+      const allProducts = result.data;
+
+      resolve(allProducts);
+    })
+    .catch((error) => reject(error));
+});
+
 const getSingleProduct = (productId) => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/crittercaps/products/product/${productId}`)
     .then((result) => {
@@ -33,4 +43,15 @@ const getSingleProduct = (productId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-export default { getNewestProducts, getAllAvailableProducts, getSingleProduct };
+const updateSingleProduct = (productId, newProductObj) => axios.put(`${baseUrl}/api/crittercaps/products/product/${productId}/edit`, newProductObj);
+
+const addProduct = (productObj) => axios.post(`${baseUrl}/api/crittercaps/products`, productObj);
+
+export default {
+  getNewestProducts,
+  getAllAvailableProducts,
+  getSingleProduct,
+  updateSingleProduct,
+  addProduct,
+  getAllProducts,
+};

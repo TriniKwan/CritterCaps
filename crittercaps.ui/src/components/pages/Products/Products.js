@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
+import { Link } from 'react-router-dom';
 import './Products.scss';
 import SearchBox from '../../shared/SearchBox/SearchBox';
 import productTypesData from '../../../helpers/data/productTypesData';
@@ -19,7 +20,7 @@ class Products extends React.Component {
 
   componentDidMount() {
     this.getAllProductTypes();
-    this.getAllAvailableProducts();
+    this.getAllProducts();
     this.getUserAdminData();
   }
 
@@ -49,8 +50,8 @@ class Products extends React.Component {
   // set state to products and originalProducts
   // products array will be manipulated by search bar and ultimately what will be printed on page
   // originalProducts will be untouched so it can be used to reset the state of products
-  getAllAvailableProducts = () => {
-    ProductData.getAllAvailableProducts()
+  getAllProducts = () => {
+    ProductData.getAllProducts()
       .then((products) => this.setState({ products, originalProducts: products }))
       .catch((error) => console.error(error, 'error from allProducts'));
   }
@@ -67,7 +68,7 @@ class Products extends React.Component {
     e.preventDefault();
     const productTypeId = e.target.value;
     if (productTypeId === 'all') {
-      this.getAllAvailableProducts();
+      this.getAllProducts();
     } else {
       this.getSingleProductTypeWithProducts(productTypeId);
     }
@@ -97,11 +98,14 @@ class Products extends React.Component {
     return (
       <div className="ProductsPage">
         <h1>Products</h1>
-        <div className="searchSection">
+        <div className="searchSection addSection">
           <SearchBox
             placeholder='search'
             handleSearchEvent={this.handleSearchEvent}
           />
+          {
+            administrator ? <Link className="btn btn-outline-success" to="/products/new">Add New Item</Link> : ('')
+          }
         </div>
         <div className="dropdownSection">
           <div className="form-inline">
@@ -121,7 +125,7 @@ class Products extends React.Component {
           </div>
         </div>
         <div className="productCardSection">
-          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} administrator={administrator} />) };
+          {products == null ? [] : products.map((product) => <ProductCard key={product.productId} product={product} administrator={administrator} />) }
         </div>
       </div>
     );
