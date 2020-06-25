@@ -27,7 +27,7 @@ const addItem = (orderId, productId) => new Promise((resolve, reject) => {
 });
 
 const createNewOrder = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/orders/order/new/userId/${userId}`)
+  axios.post(`${baseUrl}/api/crittercaps/orders/order/new/userId/${userId}`)
     .then((result) => {
       const openOrder = result.data;
       resolve(openOrder);

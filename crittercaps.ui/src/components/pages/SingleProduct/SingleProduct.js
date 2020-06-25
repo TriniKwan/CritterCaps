@@ -2,7 +2,7 @@ import React from 'react';
 import './SingleProduct.scss';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
 import ProductData from '../../../helpers/data/ProductData';
 import orderData from '../../../helpers/data/orderData';
@@ -15,7 +15,6 @@ class SingleProduct extends React.Component {
     userId: '',
     orderId: '',
     cartExists: false,
-    // redirect: null,
   }
 
   getUser = () => {
@@ -48,28 +47,35 @@ class SingleProduct extends React.Component {
       })
       .catch((error) => {
         if (error === 'No order exists') {
-          this.setState({ cartExists: false, orderId: '' });
+          orderData.createNewOrder(userId);
         }
       });
   }
 
   checkExistingOrderAndCreateNew = () => {
-    const { userId, orderId, cartExists } = this.state;
+    const { userId, orderId } = this.state;
     const { productId } = this.props.match.params;
     if (userId === '') {
       authData.loginUser();
+      this.checkCartAndAddItem(userId, orderId, productId);
     }
+    this.checkCartAndAddItem(userId, orderId, productId);
+  };
+
+  checkCartAndAddItem = (userId, orderId, productId) => {
+    const { cartExists } = this.state;
     if (cartExists === true) {
       orderData.addItem(orderId, productId);
-      // this.setState({ redirect: '/userProfile/shoppingCart' });
       this.props.history.push({
         pathname: '/userProfile/shoppingCart',
         state: {
           productName: this.state.product.title,
         },
       });
+    } else {
+      orderData.createNewOrder(userId);
     }
-  };
+  }
 
   componentDidMount() {
     const { productId } = this.props.match.params;
@@ -83,11 +89,6 @@ class SingleProduct extends React.Component {
   render() {
     const { product } = this.state;
     const price = Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    // const currentProduct = this.props.history.location.pathname;
-
-    // if (this.state.redirect) {
-    //   return <Redirect from={currentProduct} to={this.state.redirect} />;
-    // }
 
     return (
       <div className="SingleProductCard m-2">
