@@ -7,19 +7,33 @@ import ProductData from '../../../helpers/data/ProductData';
 class SingleProduct extends React.Component {
   state = {
     product: {},
+    quantity: '',
+    disable: false,
   }
 
   componentDidMount() {
     // console.log('I was triggered during componentDidMount');
     const { productId } = this.props.match.params;
-    // eslint-disable-next-line no-console
     ProductData.getSingleProduct(productId)
-      .then((product) => this.setState({ product }))
+      .then((product) => {
+        // eslint-disable-next-line radix
+        this.setState({ product, quantity: parseInt(product.quantity) });
+        this.disableButton();
+      })
       .catch((error) => console.error(error, 'error from single product'));
   }
 
+  disableButton = () => {
+    const { quantity } = this.state;
+    if (quantity < 1) {
+      this.setState({ disable: true });
+    } else {
+      this.setState({ disable: false });
+    }
+  }
+
   render() {
-    const { product } = this.state;
+    const { product, disable } = this.state;
     const price = Number(product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
@@ -40,8 +54,10 @@ class SingleProduct extends React.Component {
               <Card.Text>
                 Price: {price}
               </Card.Text>
-              <Link to="/" className="btn btn-info m-2">Back</Link>
-              <Link to={`/products/${product}`} className="btn btn-info m-2">Add To Cart</Link>
+              <Link to="/products" className="btn btn-info m-2">Back</Link>
+              {
+                disable ? ('Out of Stock') : (<Link to={`/products/${product}`} className="btn btn-info m-2 addButton" >Add To Cart</Link>)
+              }
             </Card.Footer>
           </Card>
       </div>

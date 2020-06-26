@@ -37,7 +37,7 @@ namespace CritterCaps.Repositories
 
         public Product GetSingleProduct(int productId)
         {
-            var sql = @"SELECT ProductId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
+            var sql = @"SELECT ProductId, Products.ProductTypeId, Products.AnimalTypeId, Title, [Description], Quantity, Price, imageUrl, inStock, Category, AnimalType
                         FROM Products
 	                        JOIN ProductType
 	                        ON ProductType.ProductTypeId = Products.ProductTypeId
@@ -50,6 +50,45 @@ namespace CritterCaps.Repositories
                 var product = db.QueryFirstOrDefault<Product>(sql, new { ProductId = productId });
 
                 return product;
+            }
+        }
+
+        public ProductDBInfo AddProduct(ProductDBInfo productToAdd)
+        {
+            var sql = @$"insert into Products(ProductTypeId, AnimalTypeId, Title, [Description], Quantity, Price, imageUrl, inStock, DateAdded)
+                        OUTPUT INSERTED.*
+                        values (@ProductTypeId, @AnimalTypeId, @Title, @Description, @Quantity, @Price, @imageUrl, @InStock, '{DateTime.Now.ToShortDateString()}')";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var result = db.QueryFirstOrDefault<ProductDBInfo>(sql, productToAdd);
+                return result;
+            }
+        }
+
+        public ProductDBInfo UpdateSingleProduct(int productId, ProductDBInfo updatedProduct)
+        {
+            var sql = @"update Products
+                        set Title=@Title, [Description]=@Description, Quantity=@Quantity, Price=@Price, imageUrl=@imageUrl, InStock=@InStock, ProductTypeId=@ProductTypeId, AnimalTypeId=@AnimalTypeId
+                        where ProductId=@ProductId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var parameters = new
+                {
+                    Title = updatedProduct.Title,
+                    Description = updatedProduct.Description,
+                    Quantity = updatedProduct.Quantity,
+                    Price = updatedProduct.Price,
+                    ImageUrl = updatedProduct.ImageUrl,
+                    InStock = updatedProduct.InStock,
+                    ProductTypeId = updatedProduct.ProductTypeId,
+                    AnimalTypeId = updatedProduct.AnimalTypeId,
+                    ProductId = productId
+                };
+
+                var result = db.QueryFirstOrDefault<ProductDBInfo>(sql, parameters);
+                return result;
             }
         }
 

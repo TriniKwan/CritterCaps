@@ -20,6 +20,7 @@ import SingleProduct from '../components/pages/SingleProduct/SingleProduct';
 import NavBar from '../components/shared/Navbar/Navbar';
 import Dashboard from '../components/pages/Dashboard/Dashboard';
 import EditProduct from '../components/pages/EditProduct/EditProduct';
+import ProductForm from '../components/pages/ProductForm/ProductForm';
 
 import authData from '../helpers/data/authData';
 
@@ -48,26 +49,15 @@ class App extends React.Component {
         if (sessionStorage.getItem('token')) {
           this.setState({ authed: true });
           this.setState({ uid: user.uid });
-        }
-      } else {
-        this.setState({ authed: false });
-        this.setState({ uid: '' });
-      }
-    });
-    this.getUserData();
-  }
-
-  getUserData = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        if (sessionStorage.getItem('token')) {
           const userUid = authData.getUid();
           authData.getUserByUid(userUid)
             .then((userData) => this.setState({ administrator: userData.administrator }))
             .catch((error) => console.error(error, 'error from get user Data'));
-        } else {
-          this.setState({ administrator: false });
         }
+      } else {
+        this.setState({ authed: false });
+        this.setState({ uid: '' });
+        this.setState({ administrator: false });
       }
     });
   }
@@ -85,13 +75,14 @@ class App extends React.Component {
           <NavBar authed={authed} administrator={administrator} />
           <Switch>
             <Route path="/" exact component={Home} authed={authed} />
-            <Route path="/products" exact component={Products} authed={authed} />
+            <Route path="/products" exact component={Products} authed={authed} administrator={administrator} />
             <PrivateRoute path="/dashboard" exact component={Dashboard} authed={authed} ></PrivateRoute>
             <PrivateRoute path="/userProfile" exact component={UserProfile} authed={authed} />
             <PrivateRoute path="/userProfile/orders" exact component={Orders} authed={authed} />
+            <PrivateRoute path="/products/new" exact component={ProductForm} authed={authed} />
             <Route path="/userProfile/shoppingCart" render={(props) => (<ShoppingCart {...props} authed={authed} uid={uid} />)} />
             <Route path="/products/:productId" exact component={SingleProduct} authed={authed} />
-            <PrivateRoute path="/products/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
+            <PrivateRoute path="/products/product/:productId/edit" exact component={EditProduct} authed={authed} administrator={administrator} ></PrivateRoute>
           </Switch>
         </Router>
       </div>
