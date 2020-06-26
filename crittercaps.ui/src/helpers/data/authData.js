@@ -32,7 +32,7 @@ const getUserByEmail = (email) => new Promise((resolve, reject) => {
 
 const registerUser = (newUserInfo) => axios.post(`${baseUrl}/api/crittercaps/users`, newUserInfo);
 
-const loginUser = () => {
+const loginUser = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
 
   firebase.auth().signInWithPopup(provider).then((cred) => {
