@@ -73,7 +73,9 @@ class NavBar extends React.Component {
                         <Nav className="ml-auto">
                             <Link className="nav-link" id="navvy-link" to="/">Home</Link>
                             <Link className="nav-link" id="navvy-link" to="/products">Hats</Link>
-                            <Link className="nav-link" id="navvy-link" to="/userProfile/shoppingCart">Shopping Cart</Link>
+                            {authed
+                              ? (<Link className="nav-link" id="navvy-link" to="/userProfile/shoppingCart">Shopping Cart</Link>)
+                              : ('')}
                             {
                                 authed && this.state.noProfile
                                   ? <RegistrationForm show={this.state.show} edit={false} handleClose={this.handleClose} />
@@ -86,7 +88,7 @@ class NavBar extends React.Component {
                               ? (<Link className="nav-link" id="dashboard-link" to="/dashboard">Dashboard</Link>)
                               : ('') }
                             { authed
-                              ? (<Button variant="dark" onClick={this.logOut} className="logOutButton">Log Out</Button>)
+                              ? (<Button to="/" variant="dark" onClick={this.logOut} className="logOutButton">Log Out</Button>)
                               : (<Login />) }
                         </Nav>
                     </Navbar.Collapse>

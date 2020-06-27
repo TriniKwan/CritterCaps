@@ -195,22 +195,19 @@ namespace CritterCaps.Repositories
                         FROM Products
                         WHERE ProductId = @productId";
 
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
-                
-
-                var order = GetPendingOrder(orderId);
-                decimal total = 0;
-
-                foreach (var item in order.LineItem)
-                {
-                    total += item.UnitPrice;
-                }
-
-                UpdateTotal(total, orderId);
 
                 var updatedOrder = GetPendingOrder(orderId);
+                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
+
+                UpdateTotal(total.Total, orderId);
                 return updatedOrder;
             }
         }
@@ -247,7 +244,7 @@ namespace CritterCaps.Repositories
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                db.QueryFirstOrDefault(sql, new { OrderId = orderId, Total = total });
+                db.QueryFirstOrDefault(sql, new { OrderId = orderId, Total = total});
             }
         }
 
@@ -331,20 +328,19 @@ namespace CritterCaps.Repositories
                         FROM LineItem
                         WHERE OrderId = @orderId AND ProductId = @productId";
 
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
+
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
 
+                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
 
-                var order = GetPendingOrder(orderId);
-                decimal total = 0;
-
-                foreach (var item in order.LineItem)
-                {
-                    total += item.UnitPrice;
-                }
-
-                UpdateTotal(total, orderId);
+                UpdateTotal(total.Total, orderId);
 
                 var updatedOrder = GetPendingOrder(orderId);
                 return updatedOrder;
@@ -403,6 +399,12 @@ namespace CritterCaps.Repositories
 	                            ON LineItem.ProductId = Products.ProductId
                             WHERE [Order].UserId = @UserId AND [Order].OrderId = @orderId";
 
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
+
             using (var db = new SqlConnection(ConnectionString))
             {
                 var order = db.QueryFirstOrDefault<OrderInProgressWithLineItems>(orderSql, new { UserId = userId });
@@ -415,6 +417,8 @@ namespace CritterCaps.Repositories
                     if (lineItems.Any())
                     {
                         order.LineItem = lineItems;
+                        var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
+                        order.Total = total.Total;
                     }
 
                     return order;
