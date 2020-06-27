@@ -49,8 +49,13 @@ class ShoppingCart extends React.Component {
             // eslint-disable-next-line prefer-destructuring
             cartWithDate.invoiceDate = date[0];
             this.setState({ cartData: cartWithDate });
-            this.setState({ itemTotal: Number(cartWithDate.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) });
-            this.setState({ lineItems: cart.lineItem });
+            if (cart.lineItem === null) {
+              this.setState({ lineItems: [] });
+              this.setState({ itemTotal: 0 });
+            } else {
+              this.setState({ lineItems: cart.lineItem });
+              this.setState({ itemTotal: Number(cart.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) });
+            }
             this.setState({ cartExists: true });
           }
         })
@@ -59,6 +64,7 @@ class ShoppingCart extends React.Component {
             this.setState({ cartExists: false });
             this.setState({ cartData: [] });
             this.setState({ lineItems: [] });
+            this.setState({ itemTotal: 0 });
           }
         });
     }
