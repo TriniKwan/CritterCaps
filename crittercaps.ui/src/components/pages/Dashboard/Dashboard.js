@@ -1,12 +1,16 @@
 import React from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import './Dashboard.scss';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
+import orderData from '../../../helpers/data/orderData';
+import OrderCard from '../../shared/OrderCard/OrderCard';
 
 class Dashboard extends React.Component {
   state = {
     userData: {},
+    orders: [],
   }
 
   getUserData = () => {
@@ -24,12 +28,19 @@ class Dashboard extends React.Component {
     });
   }
 
+  getAllOrders = () => {
+    orderData.getAllOrders()
+      .then((orders) => this.setState({ orders }))
+      .catch((errFromAllOrders) => console.error(errFromAllOrders));
+  }
+
   componentDidMount() {
     this.getUserData();
+    this.getAllOrders();
   }
 
   render() {
-    const { userData } = this.state;
+    const { userData, orders } = this.state;
 
     return (
       <div className="UserProfile">
@@ -52,6 +63,12 @@ class Dashboard extends React.Component {
               <Link className="btn btn-success" to="/products/new">Add New Item</Link>
             </Card.Footer>
           </Card>
+        </div>
+        <div className="orderSection" >
+          <h2>Completed Orders</h2>
+          {
+            orders.map((order) => <OrderCard key={orders.orderId} order={order} />)
+          }
         </div>
       </div>
     );
