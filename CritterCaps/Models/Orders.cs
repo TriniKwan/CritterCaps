@@ -34,4 +34,9 @@ namespace CritterCaps.Models
         public DateTime InvoiceDate { get; set; }
         public decimal Total { get; set; }
     }
+
+    public class SellerOrderTotal
+    {
+        public decimal Total { get; set; }
+    }
 }

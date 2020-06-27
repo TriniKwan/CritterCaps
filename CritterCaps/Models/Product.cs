@@ -43,4 +43,11 @@ namespace CritterCaps.Models
         public bool InStock { get; set; }
         public DateTime DateAdded { get; set; }
     }
+
+    public class InventoryByCategory
+    {
+        public int ProductTypeId { get; set; }
+        public string Category { get; set; }
+        public int TotalProducts { get; set; }
+    }
 }

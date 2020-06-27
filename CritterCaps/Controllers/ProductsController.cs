@@ -88,5 +88,18 @@ namespace CritterCaps.Controllers
 
             return Ok(results);
         }
+
+        [HttpGet("categoryTotals")]
+        public IActionResult GetTotalInventoryByCategory()
+        {
+            var results = _productRepository.TotalInventoryByCategory();
+
+            if(results == null)
+            {
+                return NotFound("No products within the category");
+            }
+
+            return Ok(results);
+        }
     }
 }
