@@ -16,10 +16,18 @@ const getIndividualSales = (userId) => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/crittercaps/orders/${userId}/dashboard/total`)
     .then((result) => {
       const individualSalesTotal = result.data;
-      console.log(individualSalesTotal);
       resolve(individualSalesTotal);
     })
     .catch((error) => reject(error));
 });
 
-export default { getOpenOrder, getIndividualSales };
+const getIndividualSalesForMonth = (userId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/orders/${userId}/dashboard/total/monthly`)
+    .then((result) => {
+      const individualMonthlySalesTotal = result.data;
+      resolve(individualMonthlySalesTotal);
+    })
+    .catch((error) => reject(error));
+});
+
+export default { getOpenOrder, getIndividualSales, getIndividualSalesForMonth };

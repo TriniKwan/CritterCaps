@@ -47,6 +47,16 @@ const updateSingleProduct = (productId, newProductObj) => axios.put(`${baseUrl}/
 
 const addProduct = (productObj) => axios.post(`${baseUrl}/api/crittercaps/products`, productObj);
 
+const getTotalInventoryByCategory = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/products/categoryTotals`)
+    .then((result) => {
+      const categoryTotals = result.data;
+
+      resolve(categoryTotals);
+    })
+    .catch((error) => reject(error));
+});
+
 export default {
   getNewestProducts,
   getAllAvailableProducts,
@@ -54,4 +64,5 @@ export default {
   updateSingleProduct,
   addProduct,
   getAllProducts,
+  getTotalInventoryByCategory,
 };

@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
 import orderData from '../../../helpers/data/orderData';
+import ProductData from '../../../helpers/data/ProductData';
 
 class Dashboard extends React.Component {
   state = {
     userData: {},
     adminTotalSales: 0,
     userId: 0,
+    adminMonthlyTotalSales: 0,
+    inventoryTotals: {},
   }
 
   getUserData = () => {
@@ -21,6 +24,7 @@ class Dashboard extends React.Component {
             .then((userData) => {
               this.setState({ userData, userId: userData.id });
               this.getSingleAdminSales();
+              this.getSingleMonthlyAdminSales();
             })
             .catch((error) => console.error(error, 'error from get user Data'));
         } else {
@@ -31,18 +35,34 @@ class Dashboard extends React.Component {
   }
 
   getSingleAdminSales = () => {
-    console.log(this.state.userId, 'not working');
     orderData.getIndividualSales(this.state.userId)
       .then((adminTotalSales) => this.setState({ adminTotalSales: adminTotalSales.total }))
-      .catch((error) => console.error(error, 'error from get get individual sales'));
+      .catch((error) => console.error(error, 'error from get individual sales'));
+  }
+
+  getSingleMonthlyAdminSales = () => {
+    orderData.getIndividualSalesForMonth(this.state.userId)
+      .then((adminMonthlyTotalSales) => this.setState({ adminMonthlyTotalSales: adminMonthlyTotalSales.total }))
+      .catch((error) => console.error(error, 'error from get monthly individual monthly sales'));
+  }
+
+  getTotalInventoryByCategory = () => {
+    ProductData.getTotalInventoryByCategory()
+      .then((inventoryTotals) => this.setState({ inventoryTotals }))
+      .catch((error) => console.error(error, 'error from get total inventory by category'));
   }
 
   componentDidMount() {
     this.getUserData();
+    this.getSingleMonthlyAdminSales();
+    this.getTotalInventoryByCategory();
   }
 
   render() {
-    const { userData, adminTotalSales } = this.state;
+    const { userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals } = this.state;
+
+    const totalSales = Number(adminTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const monthlyTotalSales = Number(adminMonthlyTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
       <div className="UserProfile">
@@ -69,13 +89,23 @@ class Dashboard extends React.Component {
 
             <Card.Title>Sales Stats:</Card.Title>
             <Card.Body>
-              Total Sales this Month: {adminTotalSales}
+              Total Sales: {totalSales}
+              <Card.Text>
+                Total Sales this Month: {monthlyTotalSales}
+              </Card.Text>
               <Card.Text>
                 Average per Item:
               </Card.Text>
-              <Card.Text>
-                Total Inventory by Category:
-              </Card.Text>
+              Total Inventory by Category:
+              {
+                inventoryTotals.length > 0
+                  ? inventoryTotals.map((inventoryTotal) => (
+                    <Card.Text key={inventoryTotal.productTypeId}>
+                      {inventoryTotal.category} - {inventoryTotal.totalProducts}
+                    </Card.Text>
+                  ))
+                  : ('')
+              }
               <Card.Text>
                 Orders that Require Shipping:
               </Card.Text>
