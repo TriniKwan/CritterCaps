@@ -40,7 +40,6 @@ class SingleProduct extends React.Component {
   getOrder = (userId) => {
     orderData.getOpenOrder(userId)
       .then((cart) => {
-        console.error(cart);
         if (cart !== 'no open orders') {
           this.setState({ cartExists: true });
           this.setState({ orderId: cart.orderId });
@@ -63,9 +62,13 @@ class SingleProduct extends React.Component {
     const { productId } = this.props.match.params;
     if (userId === '') {
       authData.loginUser();
-      window.setTimeout(this.checkCartAndAddItem(orderId, productId), 20000);
+      if (orderId === '') {
+        setTimeout(this.getOrder(userId), 40000);
+      }
+      setTimeout(this.checkCartAndAddItem(orderId, productId), 30000);
+    } else {
+      this.checkCartAndAddItem(orderId, productId);
     }
-    this.checkCartAndAddItem(orderId, productId);
   };
 
   checkCartAndAddItem = (orderId, productId) => {
