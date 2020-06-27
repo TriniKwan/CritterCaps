@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
         <div className="orderSection" >
           <h2>Completed Orders</h2>
           {
-            orders.map((order) => <OrderCard key={orders.orderId} order={order} />)
+            orders.map((order) => <OrderCard key={order.orderId} order={order} />)
           }
         </div>
       </div>
