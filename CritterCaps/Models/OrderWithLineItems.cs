@@ -24,4 +24,10 @@ namespace CritterCaps.Models
         public decimal Total { get; set; }
     }
 
+    public class OrderTotal
+    {
+        public int OrderId { get; set; }
+        public decimal Total { get; set; }
+    }
+
 }
