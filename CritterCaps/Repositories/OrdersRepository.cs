@@ -30,7 +30,8 @@ namespace CritterCaps.Repositories
                             JOIN[User]
                             ON[Order].UserId = [User].ID
                             JOIN PaymentType
-                            ON PaymentType.PaymentID = [Order].PaymentType";
+                            ON PaymentType.PaymentID = [Order].PaymentType
+                            ORDER BY InvoiceDate desc";
 
             using (var db = new SqlConnection(ConnectionString))
             {

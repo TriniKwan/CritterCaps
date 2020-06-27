@@ -29,8 +29,19 @@ const createNewOrder = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getAllOrders = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/critterCaps/orders`)
+    .then((result) => {
+      const allProducts = result.data;
+
+      resolve(allProducts);
+    })
+    .catch((error) => reject(error));
+});
+
 export default {
   getOpenOrder,
   addItem,
   createNewOrder,
+  getAllOrders,
 };
