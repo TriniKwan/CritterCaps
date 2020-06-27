@@ -1,14 +1,17 @@
 import React from 'react';
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
+import './Dashboard.scss';
 import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
 import orderData from '../../../helpers/data/orderData';
+import OrderCard from '../../shared/OrderCard/OrderCard';
 import ProductData from '../../../helpers/data/ProductData';
 
 class Dashboard extends React.Component {
   state = {
     userData: {},
+    orders: [],
     adminTotalSales: 0,
     userId: 0,
     adminMonthlyTotalSales: 0,
@@ -52,14 +55,21 @@ class Dashboard extends React.Component {
       .catch((error) => console.error(error, 'error from get total inventory by category'));
   }
 
+  getAllOrders = () => {
+    orderData.getAllOrders()
+      .then((orders) => this.setState({ orders }))
+      .catch((errFromAllOrders) => console.error(errFromAllOrders));
+  }
+
   componentDidMount() {
     this.getUserData();
+    this.getAllOrders();
     this.getTotalInventoryByCategory();
   }
 
   render() {
     const {
-      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals,
+      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals, orders
     } = this.state;
 
     const totalSales = Number(adminTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -112,6 +122,12 @@ class Dashboard extends React.Component {
               </Card.Text>
             </Card.Body>
           </Card>
+        </div>
+        <div className="orderSection" >
+          <h2>Completed Orders</h2>
+          {
+            orders.map((order) => <OrderCard key={order.orderId} order={order} />)
+          }
         </div>
       </div>
     );
