@@ -40,25 +40,35 @@ class SingleProduct extends React.Component {
   getOrder = (userId) => {
     orderData.getOpenOrder(userId)
       .then((cart) => {
+        console.error(cart);
         if (cart !== 'no open orders') {
           this.setState({ cartExists: true });
           this.setState({ orderId: cart.orderId });
         }
       })
-      .catch((error) => console.error(error, 'error from getOrder'));
+      .catch((error) => {
+        if (error.response.data === 'no open orders') {
+          orderData.createNewOrder(userId)
+            .then((response) => {
+              this.setState({ cartExists: true });
+              this.setState({ orderId: response.orderId })
+            });
+        }
+      });
   }
 
-  checkExistingOrderAndCreateNew = () => {
+  checkExistingOrderAndCreateNew = (e) => {
+    e.preventDefault();
     const { userId, orderId } = this.state;
     const { productId } = this.props.match.params;
     if (userId === '') {
       authData.loginUser();
-      this.checkCartAndAddItem(userId, orderId, productId);
+      window.setTimeout(this.checkCartAndAddItem(orderId, productId), 20000);
     }
-    this.checkCartAndAddItem(userId, orderId, productId);
+    this.checkCartAndAddItem(orderId, productId);
   };
 
-  checkCartAndAddItem = (userId, orderId, productId) => {
+  checkCartAndAddItem = (orderId, productId) => {
     const { cartExists } = this.state;
     if (cartExists === true) {
       orderData.addItem(orderId, productId);
@@ -68,8 +78,6 @@ class SingleProduct extends React.Component {
           productName: this.state.product.title,
         },
       });
-    } else {
-      orderData.createNewOrder(userId);
     }
   }
 
