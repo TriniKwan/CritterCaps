@@ -28,7 +28,7 @@ class ShoppingCart extends React.Component {
             .then((userData) => {
               if (userData) {
                 this.setState({ userId: userData.id });
-                this.getShoppingCartData(this.state.userId);
+                this.getShoppingCartData(userData.id);
               }
             })
             .catch((error) => console.error('error from getUser', error));
@@ -76,8 +76,11 @@ class ShoppingCart extends React.Component {
     if (this.props.location.state) {
       this.setState({ addedToCart: true });
       this.setState({ productName: this.props.location.state.productName });
-      this.getShoppingCartData(this.state.userId);
     } else { this.setState({ addedToCart: false }); }
+
+    if (this.addedToCart === true) {
+      this.getShoppingCartData(this.state.userId);
+    }
   }
 
   render() {

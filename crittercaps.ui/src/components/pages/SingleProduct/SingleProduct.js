@@ -40,16 +40,12 @@ class SingleProduct extends React.Component {
   getOrder = (userId) => {
     orderData.getOpenOrder(userId)
       .then((cart) => {
-        if (cart !== 'No order exists') {
+        if (cart !== 'no open orders') {
           this.setState({ cartExists: true });
           this.setState({ orderId: cart.orderId });
         }
       })
-      .catch((error) => {
-        if (error === 'No order exists') {
-          orderData.createNewOrder(userId);
-        }
-      });
+      .catch((error) => console.error(error, 'error from getOrder'));
   }
 
   checkExistingOrderAndCreateNew = () => {
