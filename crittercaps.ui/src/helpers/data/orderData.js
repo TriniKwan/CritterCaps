@@ -12,6 +12,6 @@ const getOpenOrder = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-// const deleteLineItem = (lineItemtId) => axios.delete(`${baseUrl}/Order/deleteItem/&{lineItemtId}.json`); (don't forget to export the function)
+const deleteLineItem = (orderId, productId) => axios.delete(`${baseUrl}/api/critterCaps/orders/removeItem/orderId/${orderId}/productId/${productId}`);
 
-export default { getOpenOrder };
+export default { getOpenOrder, deleteLineItem };

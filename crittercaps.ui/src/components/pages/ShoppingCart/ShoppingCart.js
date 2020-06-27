@@ -15,6 +15,7 @@ class ShoppingCart extends React.Component {
     cartData: [],
     lineItems: {},
     cartExists: false,
+    updatedCart: false,
   }
 
   // gets the userID from the database using the uid and uses it to get the shopping cart data
@@ -64,27 +65,29 @@ class ShoppingCart extends React.Component {
     this.getUser();
   }
 
-  // // TODO: delete line item event included here
-  // deleteItemEvent = (e) => {
-  //   e.preventDefault();
-  //   // delete line item;
-  //   const { product, deleteLine } = this.props;
-  //   deleteLine(product.lineItemId);
-  // }
+  // delete line item event included here
+  deleteItemEvent = (e) => {
+    e.preventDefault();
+    // delete line item;
+    const { cartData } = this.state;
+    const { product, deleteLine } = this.props;
+    deleteLine(cartData.orderId, product.productId);
+  }
 
-  //  // TODO: delete item function
-  //  deleteLine = (lineItemId) => {
-  //   orderData.deleteLineItem(lineItemId)
-  //     .then(() => this.setCurrentOrder())
-  //     .catch((err) => console.error('err from deleteline', err));
-  // }
+  // delete item function
+   deleteLine = (orderId, productId) => {
+     orderData.deleteLineItem(orderId, productId)
+       .then(() => this.setCurrentOrder())
+       .catch((err) => console.error('err from deleteline', err))
+       .then(() => this.setState({ updatedCart: true }));
+   }
 
-  render() {
-    const { cartData, lineItems, cartExists } = this.state;
+   render() {
+     const { cartData, lineItems, cartExists } = this.state;
 
-    const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+     const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-    return (
+     return (
       <div className="ShoppingCart">
         <h1>Shopping Cart</h1>
         <div className="d-flex justify-content-center">
@@ -114,7 +117,7 @@ class ShoppingCart extends React.Component {
                 : ('')
               }
             <div className="d-flex justify-content-around cartButtons">
-            {/* <a href="#" className="card-link btn btn-dark btn-sm" onClick={this.deleteItemEvent}>Remove From Cart</a> */}
+            <Button className="card-link btn btn-light btn-sm" onClick={this.deleteItemEvent}>Remove From Cart</Button>
               <Button variant="outline-info" href="/products">Continue Shopping</Button>
               <Button variant="info">Check Out</Button>
             </div>
@@ -122,8 +125,8 @@ class ShoppingCart extends React.Component {
         </Card>
         </div>
       </div>
-    );
-  }
+     );
+   }
 }
 
 export default ShoppingCart;

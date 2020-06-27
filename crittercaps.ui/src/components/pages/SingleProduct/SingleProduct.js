@@ -3,6 +3,7 @@ import './SingleProduct.scss';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import ProductData from '../../../helpers/data/ProductData';
+import orderData from '../../../helpers/data/orderData';
 
 class SingleProduct extends React.Component {
   state = {
