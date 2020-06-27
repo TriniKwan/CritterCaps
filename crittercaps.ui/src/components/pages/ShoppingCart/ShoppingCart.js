@@ -15,6 +15,7 @@ class ShoppingCart extends React.Component {
     lineItems: {},
     cartExists: false,
     productName: '',
+    itemTotal: 0,
   }
 
   // gets the userID from the database using the uid and uses it to get the shopping cart data
@@ -39,25 +40,28 @@ class ShoppingCart extends React.Component {
   }
 
   getShoppingCartData = (userId) => {
-    orderData.getOpenOrder(userId)
-      .then((cart) => {
-        if (cart !== null) {
-          const cartWithDate = cart;
-          const date = cart.invoiceDate.split('T');
-          // eslint-disable-next-line prefer-destructuring
-          cartWithDate.invoiceDate = date[0];
-          this.setState({ cartData: cartWithDate });
-          this.setState({ lineItems: cart.lineItem });
-          this.setState({ cartExists: true });
-        }
-      })
-      .catch((error) => {
-        if (error.StatusCode === 404) {
-          this.setState({ cartExists: false });
-          this.setState({ cartData: [] });
-          this.setState({ lineItems: [] });
-        }
-      });
+    if (userId !== '') {
+      orderData.getOpenOrder(userId)
+        .then((cart) => {
+          if (cart !== null) {
+            const cartWithDate = cart;
+            const date = cart.invoiceDate.split('T');
+            // eslint-disable-next-line prefer-destructuring
+            cartWithDate.invoiceDate = date[0];
+            this.setState({ cartData: cartWithDate });
+            this.setState({ itemTotal: Number(cartWithDate.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) });
+            this.setState({ lineItems: cart.lineItem });
+            this.setState({ cartExists: true });
+          }
+        })
+        .catch((error) => {
+          if (error.StatusCode === 404) {
+            this.setState({ cartExists: false });
+            this.setState({ cartData: [] });
+            this.setState({ lineItems: [] });
+          }
+        });
+    }
   }
 
   componentDidMount() {
@@ -66,15 +70,19 @@ class ShoppingCart extends React.Component {
     if (this.props.location.state) {
       this.setState({ addedToCart: true });
       this.setState({ productName: this.props.location.state.productName });
+      this.getShoppingCartData(this.state.userId);
     } else { this.setState({ addedToCart: false }); }
   }
 
   render() {
     const {
-      cartData, lineItems, cartExists, addedToCart, productName,
+      cartData,
+      lineItems,
+      cartExists,
+      addedToCart,
+      productName,
+      itemTotal,
     } = this.state;
-
-    const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
       <div className="ShoppingCart">
@@ -105,7 +113,7 @@ class ShoppingCart extends React.Component {
             </ListGroup>
             <hr></hr>
               {cartExists
-                ? (<div className="row d-flex justify-content-between m-5"><div>Total:</div><div>{Total}</div></div>)
+                ? (<div className="row d-flex justify-content-between m-5"><div>Total:</div><div>{itemTotal}</div></div>)
                 : ('')
               }
             <div className="d-flex justify-content-around cartButtons">
