@@ -12,8 +12,8 @@ const getOpenOrder = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getIndividualSales = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/orders/${userId}/dashboard/total`)
+const getSales = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/orders/dashboard/total`)
     .then((result) => {
       const individualSalesTotal = result.data;
       resolve(individualSalesTotal);
@@ -21,13 +21,13 @@ const getIndividualSales = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getIndividualSalesForMonth = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/crittercaps/orders/${userId}/dashboard/total/monthly`)
+const getSalesForMonth = (userId) => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/orders/dashboard/total/monthly`)
     .then((result) => {
-      const individualMonthlySalesTotal = result.data;
-      resolve(individualMonthlySalesTotal);
+      const monthlySalesTotal = result.data;
+      resolve(monthlySalesTotal);
     })
     .catch((error) => reject(error));
 });
 
-export default { getOpenOrder, getIndividualSales, getIndividualSalesForMonth };
+export default { getOpenOrder, getSales, getSalesForMonth };

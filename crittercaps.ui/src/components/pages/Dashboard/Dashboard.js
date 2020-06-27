@@ -23,8 +23,8 @@ class Dashboard extends React.Component {
           authData.getUserByUid(userUid)
             .then((userData) => {
               this.setState({ userData, userId: userData.id });
-              this.getSingleAdminSales();
-              this.getSingleMonthlyAdminSales();
+              this.getAdminSales();
+              this.getMonthlyAdminSales();
             })
             .catch((error) => console.error(error, 'error from get user Data'));
         } else {
@@ -34,16 +34,16 @@ class Dashboard extends React.Component {
     });
   }
 
-  getSingleAdminSales = () => {
-    orderData.getIndividualSales(this.state.userId)
+  getAdminSales = () => {
+    orderData.getSales()
       .then((adminTotalSales) => this.setState({ adminTotalSales: adminTotalSales.total }))
-      .catch((error) => console.error(error, 'error from get individual sales'));
+      .catch((error) => console.error(error, 'error from get sales'));
   }
 
-  getSingleMonthlyAdminSales = () => {
-    orderData.getIndividualSalesForMonth(this.state.userId)
+  getMonthlyAdminSales = () => {
+    orderData.getSalesForMonth()
       .then((adminMonthlyTotalSales) => this.setState({ adminMonthlyTotalSales: adminMonthlyTotalSales.total }))
-      .catch((error) => console.error(error, 'error from get monthly individual monthly sales'));
+      .catch((error) => console.error(error, 'error from get monthly sales'));
   }
 
   getTotalInventoryByCategory = () => {
@@ -54,12 +54,13 @@ class Dashboard extends React.Component {
 
   componentDidMount() {
     this.getUserData();
-    this.getSingleMonthlyAdminSales();
     this.getTotalInventoryByCategory();
   }
 
   render() {
-    const { userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals } = this.state;
+    const {
+      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals,
+    } = this.state;
 
     const totalSales = Number(adminTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     const monthlyTotalSales = Number(adminMonthlyTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
