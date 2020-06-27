@@ -194,13 +194,19 @@ namespace CritterCaps.Repositories
                         FROM Products
                         WHERE ProductId = @productId";
 
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
 
-                UpdateTotal(orderId);
-
                 var updatedOrder = GetPendingOrder(orderId);
+                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
+
+                UpdateTotal(total.Total, orderId);
                 return updatedOrder;
             }
         }
@@ -229,21 +235,15 @@ namespace CritterCaps.Repositories
         /// </summary>
         /// <param name="total">Total passed down from AddLineItem</param>
         /// <param name="orderId">Int Id for Order to update</param>
-        public void UpdateTotal(int orderId)
+        public void UpdateTotal(decimal total, int orderId)
         {
-            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
-                            FROM LineItem
-                            WHERE OrderId = @orderId
-                            GROUP BY OrderId";
-
             var sql = @"UPDATE[Order]
                         SET Total = @total
                         WHERE OrderId = @orderId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
-                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
-                db.QueryFirstOrDefault(sql, new { OrderId = orderId, total.Total });
+                db.QueryFirstOrDefault(sql, new { OrderId = orderId, Total = total});
             }
         }
 
@@ -327,11 +327,19 @@ namespace CritterCaps.Repositories
                         FROM LineItem
                         WHERE OrderId = @orderId AND ProductId = @productId";
 
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
+
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
 
-                UpdateTotal(orderId);
+                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
+
+                UpdateTotal(total.Total, orderId);
 
                 var updatedOrder = GetPendingOrder(orderId);
                 return updatedOrder;
