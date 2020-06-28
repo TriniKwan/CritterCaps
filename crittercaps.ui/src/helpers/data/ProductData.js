@@ -57,6 +57,16 @@ const getTotalInventoryByCategory = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getTotalSalesForEachProduct = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/products/sales/itemTotal`)
+    .then((result) => {
+      const productTotals = result.data;
+
+      resolve(productTotals);
+    })
+    .catch((error) => reject(error));
+});
+
 export default {
   getNewestProducts,
   getAllAvailableProducts,
@@ -65,4 +75,5 @@ export default {
   addProduct,
   getAllProducts,
   getTotalInventoryByCategory,
+  getTotalSalesForEachProduct,
 };

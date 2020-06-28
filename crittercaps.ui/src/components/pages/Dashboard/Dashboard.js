@@ -16,6 +16,7 @@ class Dashboard extends React.Component {
     userId: 0,
     adminMonthlyTotalSales: 0,
     inventoryTotals: {},
+    eachProductSales: {},
   }
 
   getUserData = () => {
@@ -61,15 +62,22 @@ class Dashboard extends React.Component {
       .catch((errFromAllOrders) => console.error(errFromAllOrders));
   }
 
+  getTotalSalesForEachProduct = () => {
+    ProductData.getTotalSalesForEachProduct()
+      .then((eachProductSales) => this.setState({ eachProductSales }))
+      .catch((error) => console.error(error, 'error from get single product sales'));
+  }
+
   componentDidMount() {
     this.getUserData();
     this.getAllOrders();
     this.getTotalInventoryByCategory();
+    this.getTotalSalesForEachProduct();
   }
 
   render() {
     const {
-      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals, orders
+      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals, orders, eachProductSales,
     } = this.state;
 
     const totalSales = Number(adminTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -104,9 +112,16 @@ class Dashboard extends React.Component {
               <Card.Text>
                 Total Sales this Month: {monthlyTotalSales}
               </Card.Text>
-              <Card.Text>
-                Average per Item:
-              </Card.Text>
+              Sales per Product:
+              {
+                eachProductSales.length > 0
+                  ? eachProductSales.map((eachProductSale) => (
+                    <Card.Text key={eachProductSale.Title}>
+                      {eachProductSale.title} - {eachProductSale.itemSales}
+                    </Card.Text>
+                  ))
+                  : ('')
+              }
               Total Inventory by Category:
               {
                 inventoryTotals.length > 0

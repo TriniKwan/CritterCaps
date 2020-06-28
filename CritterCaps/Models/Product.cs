@@ -50,4 +50,10 @@ namespace CritterCaps.Models
         public string Category { get; set; }
         public int TotalProducts { get; set; }
     }
+
+    public class TotalSalesForEachItem
+    {
+        public string Title { get; set; }
+        public decimal ItemSales { get; set; }
+    }
 }

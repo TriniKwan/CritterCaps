@@ -101,5 +101,18 @@ namespace CritterCaps.Controllers
 
             return Ok(results);
         }
+
+        [HttpGet("sales/itemTotal")]
+        public IActionResult GetSalesForEachItem()
+        {
+            var totalSales = _productRepository.GetTotalSalesForEachItem();
+
+            if (totalSales == null)
+            {
+                return NotFound("No sales for this item");
+            }
+
+            return Ok(totalSales);
+        }
     }
 }

@@ -137,5 +137,24 @@ namespace CritterCaps.Repositories
                 return totals;
             }
         }
+
+        public IEnumerable<TotalSalesForEachItem> GetTotalSalesForEachItem()
+        {
+            var sql = @"select Products.Title, sum(UnitPrice) as ItemSales
+                        from [Order]
+                        join LineItem
+                        on LineItem.OrderId = [Order].OrderId
+                        join Products
+                        on LineItem.ProductId = Products.ProductId
+                        group by Products.Title
+                        order by ItemSales desc";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var totals = db.Query<TotalSalesForEachItem>(sql);
+
+                return totals;
+            }
+        }
     }
 }
