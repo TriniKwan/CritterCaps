@@ -92,7 +92,7 @@ namespace CritterCaps.Controllers
         }
 
         //Delete line item
-        [HttpGet("removeItem/orderId/{orderId}/productId/{productId}")]
+        [HttpDelete("removeItem/orderId/{orderId}/productId/{productId}")]
         public IActionResult RemoveLineItem(int orderId, int productId)
         {
             var openOrder = _ordersRepository.CheckCompletedOrder(orderId);
