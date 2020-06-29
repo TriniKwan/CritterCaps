@@ -6,11 +6,17 @@ import Card from 'react-bootstrap/Card';
 import authData from '../../../helpers/data/authData';
 import orderData from '../../../helpers/data/orderData';
 import OrderCard from '../../shared/OrderCard/OrderCard';
+import ProductData from '../../../helpers/data/ProductData';
 
 class Dashboard extends React.Component {
   state = {
     userData: {},
     orders: [],
+    adminTotalSales: 0,
+    userId: 0,
+    adminMonthlyTotalSales: 0,
+    inventoryTotals: {},
+    eachProductSales: {},
   }
 
   getUserData = () => {
@@ -19,7 +25,11 @@ class Dashboard extends React.Component {
         if (sessionStorage.getItem('token')) {
           const userUid = authData.getUid();
           authData.getUserByUid(userUid)
-            .then((userData) => this.setState({ userData }))
+            .then((userData) => {
+              this.setState({ userData, userId: userData.id });
+              this.getAdminSales();
+              this.getMonthlyAdminSales();
+            })
             .catch((error) => console.error(error, 'error from get user Data'));
         } else {
           this.setState({ userData: {} });
@@ -28,19 +38,50 @@ class Dashboard extends React.Component {
     });
   }
 
+  getAdminSales = () => {
+    orderData.getSales()
+      .then((adminTotalSales) => this.setState({ adminTotalSales: adminTotalSales.total }))
+      .catch((error) => console.error(error, 'error from get sales'));
+  }
+
+  getMonthlyAdminSales = () => {
+    orderData.getSalesForMonth()
+      .then((adminMonthlyTotalSales) => this.setState({ adminMonthlyTotalSales: adminMonthlyTotalSales.total }))
+      .catch((error) => console.error(error, 'error from get monthly sales'));
+  }
+
+  getTotalInventoryByCategory = () => {
+    ProductData.getTotalInventoryByCategory()
+      .then((inventoryTotals) => this.setState({ inventoryTotals }))
+      .catch((error) => console.error(error, 'error from get total inventory by category'));
+  }
+
   getAllOrders = () => {
     orderData.getAllOrders()
       .then((orders) => this.setState({ orders }))
       .catch((errFromAllOrders) => console.error(errFromAllOrders));
   }
 
+  getTotalSalesForEachProduct = () => {
+    ProductData.getTotalSalesForEachProduct()
+      .then((eachProductSales) => this.setState({ eachProductSales }))
+      .catch((error) => console.error(error, 'error from get single product sales'));
+  }
+
   componentDidMount() {
     this.getUserData();
     this.getAllOrders();
+    this.getTotalInventoryByCategory();
+    this.getTotalSalesForEachProduct();
   }
 
   render() {
-    const { userData, orders } = this.state;
+    const {
+      userData, adminTotalSales, adminMonthlyTotalSales, inventoryTotals, orders, eachProductSales,
+    } = this.state;
+
+    const totalSales = Number(adminTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const monthlyTotalSales = Number(adminMonthlyTotalSales).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
     return (
       <div className="UserProfile">
@@ -62,6 +103,39 @@ class Dashboard extends React.Component {
               <Link to="/userProfile/shoppingCart" className="btn btn-danger" >Shopping Cart</Link>
               <Link className="btn btn-success" to="/products/new">Add New Item</Link>
             </Card.Footer>
+          </Card>
+          <Card style={{ width: '30rem' }} className="h-100" border="primary">
+
+            <Card.Title>Sales Stats:</Card.Title>
+            <Card.Body>
+              Total Sales: {totalSales}
+              <Card.Text>
+                Total Sales this Month: {monthlyTotalSales}
+              </Card.Text>
+              Sales per Product:
+              {
+                eachProductSales.length > 0
+                  ? eachProductSales.map((eachProductSale) => (
+                    <Card.Text key={eachProductSale.Title}>
+                      {eachProductSale.title} - {eachProductSale.itemSales}
+                    </Card.Text>
+                  ))
+                  : ('')
+              }
+              Total Inventory by Category:
+              {
+                inventoryTotals.length > 0
+                  ? inventoryTotals.map((inventoryTotal) => (
+                    <Card.Text key={inventoryTotal.productTypeId}>
+                      {inventoryTotal.category} - {inventoryTotal.totalProducts}
+                    </Card.Text>
+                  ))
+                  : ('')
+              }
+              <Card.Text>
+                Orders that Require Shipping:
+              </Card.Text>
+            </Card.Body>
           </Card>
         </div>
         <div className="orderSection" >

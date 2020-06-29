@@ -121,5 +121,40 @@ namespace CritterCaps.Repositories
                 return availProducts;
             }
         }
+
+        public IEnumerable<InventoryByCategory> TotalInventoryByCategory()
+        {
+            var sql = @"select Products.ProductTypeId, Category, sum(quantity) as TotalProducts
+                        from Products
+                        join ProductType
+                        on Products.ProductTypeId = ProductType.ProductTypeId
+                        group by Category, Products.ProductTypeId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var totals = db.Query<InventoryByCategory>(sql);
+
+                return totals;
+            }
+        }
+
+        public IEnumerable<TotalSalesForEachItem> GetTotalSalesForEachItem()
+        {
+            var sql = @"select Products.Title, sum(UnitPrice) as ItemSales
+                        from [Order]
+                        join LineItem
+                        on LineItem.OrderId = [Order].OrderId
+                        join Products
+                        on LineItem.ProductId = Products.ProductId
+                        group by Products.Title
+                        order by ItemSales desc";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var totals = db.Query<TotalSalesForEachItem>(sql);
+
+                return totals;
+            }
+        }
     }
 }
