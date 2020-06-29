@@ -427,5 +427,33 @@ namespace CritterCaps.Repositories
                 return order;
             }
         }
+
+        public SellerOrderTotal GetSales()
+        {
+            var sql = @"select sum(Total) as Total
+                        from[Order];";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var total = db.QueryFirstOrDefault<SellerOrderTotal>(sql);
+
+                return total;
+            }
+        }
+
+        public SellerOrderTotal GetMonthlySales()
+        {
+            var sql = @"select month(InvoiceDate) as [Month], sum(Total) as Total
+                    from[Order]
+                    where month(InvoiceDate) = DATEPART(month, CURRENT_TIMESTAMP)
+                    group by month(InvoiceDate)";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var totalMonthlySales = db.QueryFirstOrDefault<SellerOrderTotal>(sql);
+
+                return (totalMonthlySales);
+            }
+        }
     }
 }

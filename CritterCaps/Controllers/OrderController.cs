@@ -145,5 +145,30 @@ namespace CritterCaps.Controllers
 
             return NotFound("You can not delete completed orders");
         }
+
+        // Get total sales for seller
+        [HttpGet("dashboard/total")]
+        public IActionResult GetTotalSales()
+        {
+            var totalSales = _ordersRepository.GetSales();
+            if (totalSales == null)
+            {
+                return NotFound("We don't have any sales");
+            }
+            return Ok(totalSales);
+        }
+
+        // Get total sales for current month
+        [HttpGet("dashboard/total/monthly")]
+        public IActionResult GetTotalIndividualSalesForMonth()
+        {
+            var totalMonthlySales = _ordersRepository.GetMonthlySales();
+            if (totalMonthlySales == null)
+            {
+                return NotFound("We don't have any sales for the month");
+            }
+
+            return Ok(totalMonthlySales);
+        }
     }
 }
