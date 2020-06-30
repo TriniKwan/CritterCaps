@@ -50,7 +50,7 @@ class SingleProduct extends React.Component {
           orderData.createNewOrder(userId)
             .then((response) => {
               this.setState({ cartExists: true });
-              this.setState({ orderId: response.orderId })
+              this.setState({ orderId: response.orderId });
             });
         }
       });
@@ -85,6 +85,7 @@ class SingleProduct extends React.Component {
   }
 
   componentDidMount() {
+    // console.log('I was triggered during componentDidMount');
     const { productId } = this.props.match.params;
     ProductData.getSingleProduct(productId)
       .then((product) => {

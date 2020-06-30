@@ -7,6 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import authData from '../../../helpers/data/authData';
 import orderData from '../../../helpers/data/orderData';
+// import PropTypes from 'prop-types';
 
 class ShoppingCart extends React.Component {
   state = {
@@ -14,6 +15,7 @@ class ShoppingCart extends React.Component {
     cartData: [],
     lineItems: {},
     cartExists: false,
+    updatedCart: false,
     productName: '',
     itemTotal: 0,
   }
@@ -83,17 +85,33 @@ class ShoppingCart extends React.Component {
     }
   }
 
-  render() {
-    const {
-      cartData,
-      lineItems,
-      cartExists,
-      addedToCart,
-      productName,
-      itemTotal,
-    } = this.state;
+  // delete line item event included here
+  deleteItemEvent = (e) => {
+    // e.preventDefault();
+    // delete line item;
+    const { cartData } = this.state;
+    const productId = e.target.id;
+    this.deleteLine(cartData.orderId, productId);
+  }
 
-    return (
+  // delete item function
+   deleteLine = (orderId, productId) => {
+     orderData.deleteLineItem(orderId, productId)
+       .then(() => this.getShoppingCartData(this.state.userId))
+       .catch((err) => console.error('err from deleteline', err));
+   }
+
+   render() {
+     const {
+       cartData,
+       lineItems,
+       cartExists,
+       addedToCart,
+       productName,
+       itemTotal,
+     } = this.state;
+
+     return (
       <div className="ShoppingCart">
         <h1>Shopping Cart</h1>
         {addedToCart
@@ -112,11 +130,11 @@ class ShoppingCart extends React.Component {
           }
             <ListGroup variant="flush">
               {lineItems.length > 0
-                ? lineItems.map((item) => <ListGroup.Item id={item.productId} key={item.lineItemtId}>
+                ? lineItems.map((item) => <ListGroup.Item key={item.lineItemtId}>
                   <div className="row d-flex justify-content-between">
                     <div>{item.title}</div>
                     <div className="price">{Number(item.unitPrice).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
-                    <button className="btn"><i className="fa fa-trash"></i></button>
+                    <button className="btn" id={item.productId} onClick={this.deleteItemEvent}><i className="fa fa-trash"></i></button>
                   </div></ListGroup.Item>)
                 : ('You have no items in your cart.')}
             </ListGroup>
@@ -133,8 +151,8 @@ class ShoppingCart extends React.Component {
         </Card>
         </div>
       </div>
-    );
-  }
+     );
+   }
 }
 
 export default ShoppingCart;

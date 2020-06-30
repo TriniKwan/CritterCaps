@@ -4,7 +4,7 @@ import apiKeys from '../apiKeys.json';
 const { baseUrl } = apiKeys;
 
 const getOpenOrder = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/shoppingCart/${userId}`)
+  axios.get(`${baseUrl}/api/crittercaps/orders/shoppingcart/${userId}`)
     .then((result) => {
       const openOrder = result.data;
       resolve(openOrder);
@@ -38,7 +38,7 @@ const getSales = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getSalesForMonth = (userId) => new Promise((resolve, reject) => {
+const getSalesForMonth = () => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/crittercaps/orders/dashboard/total/monthly`)
     .then((result) => {
       const monthlySalesTotal = result.data;
@@ -47,22 +47,24 @@ const getSalesForMonth = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getAllOrders = () => new Promise((resolve, reject) => {
-    axios.get(`${baseUrl}/api/critterCaps/orders`)
-        .then((result) => {
-            const allProducts = result.data;
+const deleteLineItem = (orderId, productId) => axios.delete(`${baseUrl}/api/crittercaps/orders/removeItem/orderId/${orderId}/productId/${productId}`);
 
-            resolve(allProducts);
-        })
-        .catch((error) => reject(error));
+const getAllOrders = () => new Promise((resolve, reject) => {
+  axios.get(`${baseUrl}/api/crittercaps/orders`)
+    .then((result) => {
+      const allProducts = result.data;
+
+      resolve(allProducts);
+    })
+    .catch((error) => reject(error));
 });
 
 export default {
-    getOpenOrder,
-    getSales,
-    getSalesForMonth,
+  getOpenOrder,
+  getSales,
+  getSalesForMonth,
   addItem,
   createNewOrder,
+  deleteLineItem,
   getAllOrders,
 };
-
