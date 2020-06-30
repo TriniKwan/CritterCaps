@@ -4,7 +4,7 @@ import apiKeys from '../apiKeys.json';
 const { baseUrl } = apiKeys;
 
 const getOpenOrder = (userId) => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/shoppingCart/${userId}`)
+  axios.get(`${baseUrl}/api/crittercaps/orders/shoppingcart/${userId}`)
     .then((result) => {
       const openOrder = result.data;
       resolve(openOrder);
@@ -47,10 +47,10 @@ const getSalesForMonth = (userId) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const deleteLineItem = (orderId, productId) => axios.delete(`${baseUrl}/api/critterCaps/orders/removeItem/orderId/${orderId}/productId/${productId}`);
+const deleteLineItem = (orderId, productId) => axios.delete(`${baseUrl}/api/crittercaps/orders/removeItem/orderId/${orderId}/productId/${productId}`);
 
 const getAllOrders = () => new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/api/critterCaps/orders`)
+  axios.get(`${baseUrl}/api/crittercaps/orders`)
     .then((result) => {
       const allProducts = result.data;
 
