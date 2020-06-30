@@ -38,7 +38,7 @@ const getSales = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
-const getSalesForMonth = (userId) => new Promise((resolve, reject) => {
+const getSalesForMonth = () => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/api/crittercaps/orders/dashboard/total/monthly`)
     .then((result) => {
       const monthlySalesTotal = result.data;

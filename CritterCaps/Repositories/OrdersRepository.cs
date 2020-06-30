@@ -195,19 +195,13 @@ namespace CritterCaps.Repositories
                         FROM Products
                         WHERE ProductId = @productId";
 
-            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
-                            FROM LineItem
-                            WHERE OrderId = @orderId
-                            GROUP BY OrderId";
 
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
 
                 var updatedOrder = GetPendingOrder(orderId);
-                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
-
-                UpdateTotal(total.Total, orderId);
+                UpdateTotalStep1(orderId);
                 return updatedOrder;
             }
         }
@@ -228,6 +222,21 @@ namespace CritterCaps.Repositories
                 var checkForOpenOrder = db.Query<OrderCheck>(sql, new { OrderId = orderId });
 
                 return checkForOpenOrder;
+            }
+        }
+
+        public void UpdateTotalStep1(int orderId)
+        {
+            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
+                            FROM LineItem
+                            WHERE OrderId = @orderId
+                            GROUP BY OrderId";
+
+            using (var db = new SqlConnection(ConnectionString))
+            {
+                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
+
+                UpdateTotal(total.Total, orderId);
             }
         }
 
@@ -328,21 +337,14 @@ namespace CritterCaps.Repositories
                         FROM LineItem
                         WHERE OrderId = @orderId AND ProductId = @productId";
 
-            var totalSql = @"SELECT OrderId, sum(UnitPrice) AS Total
-                            FROM LineItem
-                            WHERE OrderId = @orderId
-                            GROUP BY OrderId";
-
 
             using (var db = new SqlConnection(ConnectionString))
             {
                 db.ExecuteAsync(sql, new { OrderId = orderId, ProductId = productId });
 
-                var total = db.QueryFirstOrDefault<OrderTotal>(totalSql, new { OrderId = orderId });
-
-                UpdateTotal(total.Total, orderId);
-
                 var updatedOrder = GetPendingOrder(orderId);
+                UpdateTotalStep1(orderId);
+
                 return updatedOrder;
             }
         }

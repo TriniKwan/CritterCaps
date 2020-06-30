@@ -87,7 +87,7 @@ class ShoppingCart extends React.Component {
 
   // delete line item event included here
   deleteItemEvent = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     // delete line item;
     const { cartData } = this.state;
     const productId = e.target.id;
@@ -97,7 +97,7 @@ class ShoppingCart extends React.Component {
   // delete item function
    deleteLine = (orderId, productId) => {
      orderData.deleteLineItem(orderId, productId)
-       .then(() => this.setState({ updatedCart: true }))
+       .then(() => this.getShoppingCartData(this.state.userId))
        .catch((err) => console.error('err from deleteline', err));
    }
 
@@ -110,8 +110,6 @@ class ShoppingCart extends React.Component {
        productName,
        itemTotal,
      } = this.state;
-
-     const Total = Number(cartData.total).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
      return (
       <div className="ShoppingCart">
@@ -146,7 +144,6 @@ class ShoppingCart extends React.Component {
                 : ('')
               }
             <div className="d-flex justify-content-around cartButtons">
-            {/* <Button className="card-link btn btn-light btn-sm" onClick={this.deleteItemEvent}>Remove From Cart</Button> */}
               <Button variant="outline-info" href="/products">Continue Shopping</Button>
               <Button variant="info">Check Out</Button>
             </div>

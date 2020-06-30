@@ -56,11 +56,8 @@ namespace CritterCaps.Repositories
             using (var db = new SqlConnection(ConnectionString))
             {
                 var parameters = new { UID = uid };
-<<<<<<< HEAD
-                User user = db.QueryFirstOrDefault<User>(sql, parameters);
-=======
-                 var user = db.QueryFirstOrDefault<User>(sql, parameters);
->>>>>>> master
+
+                var user = db.QueryFirstOrDefault<User>(sql, parameters);
 
                 return user;
             }
